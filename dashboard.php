@@ -3,7 +3,7 @@
       include('db/config.php');
       include('session.php');
       $userDetails=$userClass->userDetails($session_uid);      
-        try {
+      try {
             $db = getDB();
             $parametro = $session_uid;
             // execute the stored procedure
@@ -11,9 +11,22 @@
             // call the stored procedure
             $q = $db->query($sql);
             $q->setFetchMode(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
+          } catch (PDOException $e) {
             die("Error occurred:" . $e->getMessage());
         }
+
+        /**/
+       try {
+            $db = getDB();
+            $parametro = $session_uid;
+            // execute the stored procedure
+            $sql = 'CALL INFO_DIARIA('.$parametro.')';
+            // call the stored procedure
+            $q2 = $db->query($sql);
+            $q2->setFetchMode(PDO::FETCH_ASSOC);
+          } catch (PDOException $e) {
+            die("Error occurred:" . $e->getMessage());
+        }            
         
 ?>
 <!DOCTYPE html>
@@ -92,7 +105,42 @@
             <?php endwhile; ?>
             <!-- Count item widget-->
           </div>
-        </div>
+          <hr>
+          <div class="row">
+            <!-- Count item widget-->
+            <?php while ($r2 = $q2->fetch()): ?>
+            <!-- Count item widget-->
+            <div class="col-xl-4 col-md-4 col-6">
+              <div class="wrapper count-title d-flex">
+                <div class="icon"><i class="icon-padnote"></i></div>
+                <div class="name"><strong class="text-uppercase">Alimentación</strong><span>Mes Actual</span>
+                  <div class="count-number"><?php echo '$' . number_format($r2['GASTOS_ALIMENTACION'], 0,",",".") ?></div>
+                </div>
+              </div>
+            </div>                
+            <!-- Count item widget-->
+            <div class="col-xl-4 col-md-4 col-6">
+              <div class="wrapper count-title d-flex">
+                <div class="icon"><i class="icon-user"></i></div>
+                <div class="name"><strong class="text-uppercase">Distracciones</strong><span>Mes Actual</span>
+                  <div class="count-number"><?php echo '$' . number_format($r2['GASTOS_DISTRACCIONES'], 0,",",".") ?></div>
+                </div>
+              </div>
+            </div>
+            <!-- Count item widget-->
+            <div class="col-xl-4 col-md-4 col-6">
+              <div class="wrapper count-title d-flex">
+                <div class="icon"><i class="icon-check"></i></div>
+                <div class="name"><strong class="text-uppercase">Gastos Hormiga</strong><span>Mes Actual</span>
+                  <div class="count-number"><?php echo '$' . number_format($r2['GASTOS_HORMIGA'], 0,",",".") ?></div>
+                </div>
+              </div>
+            </div>
+
+            <?php endwhile; ?>
+            <!-- Count item widget-->
+          </div>
+        </div>        
       </section>
       <!-- Header Section-->
       <section class="dashboard-header section-padding">
