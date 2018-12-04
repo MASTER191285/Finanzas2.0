@@ -15,11 +15,12 @@ $userDetails=$userClass->userDetails($session_uid);
 </head>
 <body class="bg-dark">	
 <div class="container">
-<div class="jumbotron">
+<div class="jumbotron">	
   <h1 class="display-4">Registro de Gastos</h1>
   <p class="lead">Registro de Gastos Diarios - Semanales - Mensuales</p>  
-  <h1>Bienvenido <?php echo $userDetails->name; ?></h1>
+  <h1>Bienvenido <?php echo $userDetails->name; ?></h1>  
 </div>
+  <div class="col-sm-3 pull-right"><button type="button" class="btn btn-dark" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
 <fieldset>	
 	<legend id="titulo">Gasto a Registrar</legend>
 	<?php 
@@ -54,8 +55,7 @@ $userDetails=$userClass->userDetails($session_uid);
   		<textarea class="form-control" id="txtObservaciones" name="observaciones" rows="3" cols="30" maxlength="100"></textarea>	    
 	  </div>
 	  <input class="btn btn-primary" type="submit" value="Registrar">
-	  <input class="btn btn-primary" type="reset" value="Limpiar">
-	  <button type="button" class="btn btn-danger" onclick="window.location.href='<?php echo BASE_URL; ?>logout.php'">Cerrar Sesión</button>	  
+	  <input class="btn btn-primary" type="reset" value="Limpiar">	  
 	 </form> 
 </fieldset>
 <br><br>

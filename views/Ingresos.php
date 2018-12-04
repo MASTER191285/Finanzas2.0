@@ -60,8 +60,8 @@ $userDetails=$userClass->userDetails($session_uid);
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
-<script src="css/dist/js/bootstrap.min.js"></script>	
-<script src="css/js/src/util.js"></script>
+<script src="../css/dist/js/bootstrap.min.js"></script>	
+<script src="../css/js/src/util.js"></script>
 <script type="text/javascript">	
 	$(document).on('change',"#selectIng", function() {
 		if ($(this).val() == 4) {
