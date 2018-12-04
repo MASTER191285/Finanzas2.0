@@ -1,0 +1,11 @@
+
+.errorMsg{color: #cc0000;margin-bottom: 10px}
+
+#titulo, #monto, #fecha, #tipoIngreso, #observaciones, #comprobante, #archivo, #tipoGasto{
+	color:  #cacfd2;
+}
+
+#txtObservaciones{
+	resize: none;
+}
+
