@@ -9,7 +9,7 @@
 				$stmt = $db->prepare($query);
 
 				$stmt->execute();   				
-				var_dump($stmt);
+				//var_dump($stmt);
 				echo "<option value='' disabled selected>SELECCIONE TIPO INGRESO</option>";			
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 					extract($row);							
@@ -198,21 +198,23 @@
     		}
 		}
 		
-		function listarGastosMes(){
+		function listarGastosMes($uid){
 			
 			try {
-				getcwd();
+				getcwd();				
 				$db = getDB();
-				$query = "SELECT g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN '2019-07-01' AND CURDATE() AND id_usuario = 1";
+				$query = "SELECT g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN '2019-07-01' AND CURDATE() AND id_usuario=:id_usuario ORDER BY g.fecha";
 				$stmt = $db->prepare($query);
+				$stmt->bindParam("id_usuario", $uid,PDO::PARAM_INT);				
 				$stmt->execute();
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					extract($row);
 					echo '<tr>';
+					//echo '<td>'. money_format('%i', $row['monto']).'</td>';
 					echo '<td>'. $row['monto'].'</td>';
-					echo '<td>'. $row['fecha'].'</td>';
-					//echo '<td>'.'<img src="../uploads/"'.$row['comprobante'].'/>'.'</td>';
-					echo "<td>"."<img width='100px' alt='sin imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</td>";
+					echo '<td>'. $row['fecha'].'</td>';					
+					//echo "<td>"."<img width='100px' alt='sin imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</td>";
+					echo "<td>"."<a href='#'' class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
 					echo '<td>'. $row['observaciones'].'</td>';
 					echo '<td>'. $row['descripcion'].'</td>';
 				}

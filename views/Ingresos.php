@@ -20,6 +20,7 @@ $userDetails=$userClass->userDetails($session_uid);
   <p class="lead">Registro de Ingresos Diarios - Semanales - Mensuales</p>  
   <h1>Bienvenido <?php echo $userDetails->name; ?></h1>
 </div>
+<div class="col-sm-3 pull-right"><button type="button" class="btn btn-dark" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
 <fieldset>	
 	<legend id="titulo">Ingreso a Registrar</legend>
 	<?php 

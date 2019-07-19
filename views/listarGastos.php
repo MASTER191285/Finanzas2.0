@@ -18,8 +18,9 @@ $userDetails=$userClass->userDetails($session_uid);
 <div class="jumbotron">
   <h1 class="display-4">Listado</h1>
   <p class="lead">Listado de Gastos del Mes Actual</p>  
-  <h1>Bienvenido <?php echo $userDetails->name; ?></h1>
+  <h1>Bienvenido <?php echo $userDetails->name; ?></h1>  
 </div>
+<div class="col-sm-3 pull-right"><button type="button" class="btn btn-dark" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
 <fieldset>	
 <table class="table table-striped table-dark">
     <tr>
@@ -29,40 +30,39 @@ $userDetails=$userClass->userDetails($session_uid);
         <th scope="col">Observaciones</th>
         <th scope="col">Tipo de Gasto</th>
     </tr>
-    <?php listarGastosMes(); ?>
+    <?php $uid = $userDetails->uid; ?>
+    <?php listarGastosMes($uid); ?>
     <!-- The Modal -->
-    <div id="myModal" class="modal">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="img01">
-    <div id="caption"></div>
+    <!-- <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">              
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <img src="" class="imagepreview" style="width: 100%;" >
+        </div>
+      </div>
     </div>
+  </div> -->
+  <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" data-dismiss="modal">
+    <div class="modal-content"  >              
+      <div class="modal-body">
+      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <img src="" class="imagepreview" style="width: 100%;" >
+      </div>
+      <div class="modal-footer">
+          <div class="col-xs-12">
+               <p class="text-left">Comprobante Asociado al Gasto</p>
+          </div>
+      </div>                
+    </div>
+  </div>
+</div>
+  <!-- Fin Modal -->
 </table>
 </fieldset>
 <br><br>
 </div>	
-<script>
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the image and insert it inside the modal - use its "alt" text as a caption
-var img = document.getElementById("comprobante");
-var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
-img.onclick = function(){
-  debugger;
-  modal.style.display = "block";
-  modalImg.src = this.src;
-  captionText.innerHTML = this.alt;
-}
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() { 
-  modal.style.display = "none";
-}
-</script>
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- Popper JS -->
@@ -70,6 +70,15 @@ span.onclick = function() {
 <!-- Latest compiled JavaScript -->
 <script src="../css/dist/js/bootstrap.min.js"></script>	
 <script src="../css/js/src/util.js"></script>
-
+<script>
+// Get the modal
+$(function() {   
+		$('.pop').on('click', function() {
+      console.log('entro');
+			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
+			$('#imagemodal').modal('show');   
+		});		
+});
+</script>
 </body>
 </html>
