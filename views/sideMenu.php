@@ -22,7 +22,7 @@
             <li><a href="views/gastos.php"> <i class="icon-grid"></i>Insertar Gastos</a></li>
             <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Mantenedores</a>
               <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
-                <li><a href="#">Listado de Gastos</a></li>
+                <li><a href="views/listarGastos.php">Listado de Gastos</a></li>
                 <li><a href="#">Modificar Gastos</a></li>
                 <li><a href="#">Modificar Ingresos</a></li>
               </ul>
