@@ -203,7 +203,7 @@
 			try {
 				getcwd();				
 				$db = getDB();
-				$query = "SELECT g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN '2019-07-01' AND CURDATE() AND id_usuario=:id_usuario ORDER BY g.fecha";
+				$query = "SELECT g.id, g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN '2019-07-01' AND CURDATE() AND id_usuario=:id_usuario ORDER BY g.fecha";
 				$stmt = $db->prepare($query);
 				$stmt->bindParam("id_usuario", $uid,PDO::PARAM_INT);				
 				$stmt->execute();
@@ -217,11 +217,35 @@
 					echo "<td>"."<a href='#'' class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
 					echo '<td>'. $row['observaciones'].'</td>';
 					echo '<td>'. $row['descripcion'].'</td>';
+					echo '<td>';
+					echo '<a href="#" class="btn btn info">Editar</a>';
+					echo '<a href="#" value="id" id="eliminar" <i class="fas fa-trash-alt"> Eliminar</i></a>';
+					echo '</td>';
+					
 				}
 			} catch (PDOException $exception) {
 				die('ERROR: ' . $exception->getMessage());
 			}
 			
+		}
+
+		function eliminarGasto(){
+			
+			try {
+				getcwd();				
+				$db = getDB();
+				$id= isset($_GET['id']) ? $_GET['id'] : die('Registro no encontrado.');
+				$query = "DELETE FROM gastos WHERE id = ?";
+				$stmt = $db->prepare($query);
+				$stmt->bindParam(1, $id);     
+					if ($stmt->execute()) {
+						header('location: ../views/listarGastos.php?action=eliminar');
+					}else{
+						die('Error al Eliminar');
+					}
+			} catch (PDOException $exception) {
+				die('ERROR: ' . $exception->getMessage());
+			}
 		}
 
     	function buscaGastos(){

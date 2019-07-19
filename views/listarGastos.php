@@ -20,7 +20,7 @@ $userDetails=$userClass->userDetails($session_uid);
   <p class="lead">Listado de Gastos del Mes Actual</p>  
   <h1>Bienvenido <?php echo $userDetails->name; ?></h1>  
 </div>
-<div class="col-sm-3 pull-right"><button type="button" class="btn btn-dark" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
+<div class="col-sm-3 pull-right"><button type="button" class="btn btn-info" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
 <fieldset>	
 <table class="table table-striped table-dark">
     <tr>
@@ -29,6 +29,7 @@ $userDetails=$userClass->userDetails($session_uid);
         <th scope="col">Comprobante</th>
         <th scope="col">Observaciones</th>
         <th scope="col">Tipo de Gasto</th>
+        <th scope="col">Opciones</th>
     </tr>
     <?php $uid = $userDetails->uid; ?>
     <?php listarGastosMes($uid); ?>
@@ -74,10 +75,28 @@ $userDetails=$userClass->userDetails($session_uid);
 // Get the modal
 $(function() {   
 		$('.pop').on('click', function() {
-      console.log('entro');
+      //console.log('entro');
 			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
 			$('#imagemodal').modal('show');   
-		});		
+    });
+    
+    //Eliminar
+    $("#eliminar").on("click" ,function(){
+            //console.log('ingreso');
+            var padre = $(this).children("i").parent()[0];
+            padre = $(padre).attr("value");
+            console.log(padre);
+            $.jAlert({
+              'size': 'md',
+              'type': 'confirm',
+              'confirmQuestion':'¿Esta seguro?',
+              'showAnimation': 'fadeInUp',
+              'hideAnimation': 'fadeOutDown',
+              'onConfirm': function(e, btn){ e.preventDefault(); window.location = '../controllers/funciones.php?id=' + padre; return false; },
+              'onDeny': function(alert){ console.log("falso"); return false; }
+          });
+
+        });
 });
 </script>
 </body>
