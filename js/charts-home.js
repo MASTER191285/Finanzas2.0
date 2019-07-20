@@ -80,13 +80,14 @@ $(document).ready(function () {
         type: 'doughnut',
         data: {
             labels: [
-                "First",
-                "Second",
-                "Third"
+                "Alimentación",
+                "Distracciones",
+                "Gastos Hormiga",
+                "Gastos Fijos"
             ],
             datasets: [
                 {
-                    data: [300, 50, 100],
+                    data: [34, 50, 15, 20],
                     borderWidth: [1, 1, 1],
                     backgroundColor: [
                         brandPrimary,

@@ -32,7 +32,8 @@ $userDetails=$userClass->userDetails($session_uid);
         <th scope="col">Opciones</th>
     </tr>
     <?php $uid = $userDetails->uid; ?>
-    <?php listarGastosMes($uid); ?>
+    <?php $first_day = date('Y-m-01');  ?>
+    <?php listarGastosMes($first_day, $uid); ?>
     <!-- The Modal -->
     <!-- <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">

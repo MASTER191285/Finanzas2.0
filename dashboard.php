@@ -2,6 +2,9 @@
       require 'controllers/funciones.php';
       include('db/config.php');
       include('session.php');
+      setlocale(LC_ALL,"es_ES");      
+      $fecha = $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1];
+      $first_day = date('Y-m-01');      
       $userDetails=$userClass->userDetails($session_uid);      
       try {
             $db = getDB();
@@ -53,7 +56,7 @@
     <!-- theme stylesheet-->
     <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/estilos.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/favicon.ico">
     
@@ -147,68 +150,34 @@
         <div class="container-fluid">
           <div class="row d-flex align-items-md-stretch">
             <!-- To Do List-->
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-6 col-md-6">
               <div class="card to-do">
-                <h2 class="display h4">To do List</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                <ul class="check-lists list-unstyled">
-                  <li class="d-flex align-items-center"> 
-                    <input type="checkbox" id="list-1" name="list-1" class="form-control-custom">
-                    <label for="list-1">Similique sunt in culpa qui officia</label>
-                  </li>
-                  <li class="d-flex align-items-center"> 
-                    <input type="checkbox" id="list-2" name="list-2" class="form-control-custom">
-                    <label for="list-2">Ed ut perspiciatis unde omnis iste</label>
-                  </li>
-                  <li class="d-flex align-items-center"> 
-                    <input type="checkbox" id="list-3" name="list-3" class="form-control-custom">
-                    <label for="list-3">At vero eos et accusamus et iusto </label>
-                  </li>
-                  <li class="d-flex align-items-center"> 
-                    <input type="checkbox" id="list-4" name="list-4" class="form-control-custom">
-                    <label for="list-4">Explicabo Nemo ipsam voluptatem</label>
-                  </li>
-                  <li class="d-flex align-items-center"> 
-                    <input type="checkbox" id="list-5" name="list-5" class="form-control-custom">
-                    <label for="list-5">Similique sunt in culpa qui officia</label>
-                  </li>
-                  <li class="d-flex align-items-center"> 
-                    <input type="checkbox" id="list-6" name="list-6" class="form-control-custom">
-                    <label for="list-6">At vero eos et accusamus et iusto </label>
-                  </li>
-                  <li class="d-flex align-items-center"> 
-                    <input type="checkbox" id="list-7" name="list-7" class="form-control-custom">
-                    <label for="list-7">Similique sunt in culpa qui officia</label>
-                  </li>
-                  <li class="d-flex align-items-center"> 
-                    <input type="checkbox" id="list-8" name="list-8" class="form-control-custom">
-                    <label for="list-8">Ed ut perspiciatis unde omnis iste</label>
-                  </li>
-                </ul>
+                <h2 class="display h4">Últimos gastos registrados hoy, <?php echo $fecha; ?> </h2>
+                <p>Solo se muestran los últimos 5.</p>
+                <div class="table-responsive">
+                  <div class="listaditoGastos">
+                    <table class="table table-bordered">
+                      <tr>
+                        <th width="10%">Monto </th>
+                        <th width="30%">Observaciones</th>
+                        <th width="20%">Tipo de Gasto</th>
+                      </tr>
+                      <?php detalleDiario($parametro); ?>
+                    </table>
+                  </div>
+                </div>
               </div>
-            </div>
+            </div>            
             <!-- Pie Chart-->
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-6 col-md-6">
               <div class="card project-progress">
-                <h2 class="display h4">Project Beta progress</h2>
-                <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                <h2 class="display h4">Gráfico de Gastos</h2>
+                <p> Porcentaje Según Tipo.</p>
                 <div class="pie-chart">
                   <canvas id="pieChart" width="300" height="300"> </canvas>
                 </div>
               </div>
             </div>
-            <!-- Line Chart -->
-            <div class="col-lg-6 col-md-12 flex-lg-last flex-md-first align-self-baseline">
-              <div class="card sales-report">
-                <h2 class="display h4">Sales marketing report</h2>
-                <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor amet officiis</p>
-                <div class="line-chart">
-                  <canvas id="lineCahrt"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
       <!-- Statistics Section-->
       <section class="statistics">
@@ -504,7 +473,57 @@
     <script src="js/chart.js/Chart.min.js"></script>
     <script src="js/jquery-validation/jquery.validate.min.js"></script>
     <script src="js/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="js/charts-home.js"></script>
+    <!-- <script src="js/charts-home.js"></script> -->
+    <script>
+    $(document).ready(function () {
+      var brandPrimary = '#33b35a';
+      var PIECHART = $('#pieChart');
+      var myPieChart = new Chart(PIECHART, {
+          type: 'doughnut',
+          data: {
+              labels: [
+                <?php
+                    getcwd();       
+                    $db = getDB();
+                    $query = "SELECT sum(g.monto) AS TOTALES, tg.descripcion AS DESCRIPCION FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id  WHERE g.id_usuario = 1 AND g.fecha BETWEEN '2019-07-01' AND CURDATE() GROUP BY tg.descripcion";
+                    $stmt = $db->prepare($query);                
+                    $stmt->execute(); 
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    ?>
+                      ['<?php echo $row['DESCRIPCION']?>'],
+                    <?php 
+                    }
+                  ?>                  
+              ],
+              datasets: [
+                  {
+                      data: [
+                        <?php
+                          getcwd();       
+                          $db = getDB();
+                          $query = "SELECT ROUND(sum(g.monto) * 100.0 / (select monto from ingresos where id_tipo_ingreso = 1 and id_usuario = 1 and fecha BETWEEN '2019-07-01' AND CURDATE()),1) as PORCENTAJE
+                          ,tg.descripcion AS DESCRIPCION FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE g.id_usuario = 1 AND g.fecha BETWEEN '2019-07-01' AND CURDATE() GROUP BY tg.descripcion";
+                          $stmt = $db->prepare($query);                
+                          $stmt->execute(); 
+                          while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                          ?>
+                            ['<?php echo $row['PORCENTAJE']?>'],
+                          <?php 
+                          }
+                        ?>
+                      ],
+                      borderWidth: [1, 1, 1],
+                      backgroundColor: ["#0074D9", "#FF4136", "#2ECC40", "#FF851B", "#7FDBFF", "#B10DC9"],
+                      hoverBackgroundColor: [
+                          brandPrimary,
+                          "rgba(75,192,192,1)",
+                          "#FFCE56"
+                      ]
+                  }]
+          }
+      });
+    });
+    </script>
     <!-- Main File-->
     <script src="js/front.js"></script>
   </body>

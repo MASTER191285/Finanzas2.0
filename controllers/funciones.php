@@ -1,4 +1,6 @@
 <?php 
+		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+		$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");		
 		#region AlimentaCombos
 		function getTipoIngreso(){
 
@@ -198,20 +200,21 @@
     		}
 		}
 		
-		function listarGastosMes($uid){
+		function listarGastosMes($fecha, $uid){
 			
 			try {
-				getcwd();				
+				getcwd();								
 				$db = getDB();
-				$query = "SELECT g.id, g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN '2019-07-01' AND CURDATE() AND id_usuario=:id_usuario ORDER BY g.fecha";
+				$query = 'SELECT g.id, g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN :fechaini AND CURDATE() AND id_usuario=:id_usuario ORDER BY g.fecha';
 				$stmt = $db->prepare($query);
-				$stmt->bindParam("id_usuario", $uid,PDO::PARAM_INT);				
+				$stmt->bindParam("fechaini", $fecha, PDO::PARAM_STR, 10);
+				$stmt->bindParam("id_usuario", $uid,PDO::PARAM_INT);
 				$stmt->execute();
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					extract($row);
 					echo '<tr>';
 					//echo '<td>'. money_format('%i', $row['monto']).'</td>';
-					echo '<td>'. $row['monto'].'</td>';
+					echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';
 					echo '<td>'. $row['fecha'].'</td>';					
 					//echo "<td>"."<img width='100px' alt='sin imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</td>";
 					echo "<td>"."<a href='#'' class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
@@ -221,7 +224,7 @@
 					echo '<a href="#" class="btn btn info">Editar</a>';
 					echo '<a href="#" value="id" id="eliminar" <i class="fas fa-trash-alt"> Eliminar</i></a>';
 					echo '</td>';
-					
+					echo '</tr>';
 				}
 			} catch (PDOException $exception) {
 				die('ERROR: ' . $exception->getMessage());
@@ -243,6 +246,27 @@
 					}else{
 						die('Error al Eliminar');
 					}
+			} catch (PDOException $exception) {
+				die('ERROR: ' . $exception->getMessage());
+			}
+		}
+
+		function detalleDiario($uid){
+			try {
+				getcwd();				
+				$db = getDB();
+				$query = "SELECT g.id as id, g.monto as monto ,g.observaciones as observaciones ,tg.descripcion as descripcion FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id AND g.fecha = CURDATE()  AND id_usuario=:id_usuario LIMIT 0,5";
+				$stmt = $db->prepare($query);
+				$stmt->bindParam("id_usuario", $uid, PDO::PARAM_INT);
+				$stmt->execute();
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+					extract($row);
+					echo '<tr>';					
+					echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';
+					echo '<td>'. $row['observaciones'].'</td>';
+					echo '<td>'. $row['descripcion'].'</td>';
+					echo '</tr>';
+				}
 			} catch (PDOException $exception) {
 				die('ERROR: ' . $exception->getMessage());
 			}
