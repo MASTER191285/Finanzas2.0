@@ -220,8 +220,8 @@
 					echo "<td>"."<a href='#'' class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
 					echo '<td>'. $row['observaciones'].'</td>';
 					echo '<td>'. $row['descripcion'].'</td>';
-					echo '<td>';
-					echo '<a href="#" class="btn btn info">Editar</a>';
+					echo '<td>';					
+					echo "<button value='$row[id]' id='$row[id]' class='btn btn-info btn-xs edit_data'>Editar </button>";
 					echo '<a href="#" value="id" id="eliminar" <i class="fas fa-trash-alt"> Eliminar</i></a>';
 					echo '</td>';
 					echo '</tr>';
@@ -231,6 +231,7 @@
 			}
 			
 		}
+
 
 		function eliminarGasto(){
 			
@@ -259,12 +260,21 @@
 				$stmt = $db->prepare($query);
 				$stmt->bindParam("id_usuario", $uid, PDO::PARAM_INT);
 				$stmt->execute();
-				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-					extract($row);
-					echo '<tr>';					
-					echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';
-					echo '<td>'. $row['observaciones'].'</td>';
-					echo '<td>'. $row['descripcion'].'</td>';
+				$cantidad = $stmt->rowCount();
+				if ($cantidad > 0) {
+					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+						extract($row);
+						echo '<tr>';					
+						echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';
+						echo '<td>'. $row['observaciones'].'</td>';
+						echo '<td>'. $row['descripcion'].'</td>';
+						echo '</tr>';
+					}					
+				}else{
+					echo '<tr>';
+					echo '<td>0</td>';
+					echo '<td>Sin registros el día de hoy</td>';
+					echo '<td>No aplica</td>';
 					echo '</tr>';
 				}
 			} catch (PDOException $exception) {

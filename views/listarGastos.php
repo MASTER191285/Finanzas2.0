@@ -3,6 +3,8 @@ require '../controllers/funciones.php';
 include('../db/config.php');
 include('../session.php');
 $userDetails=$userClass->userDetails($session_uid);
+$mesActual = $meses[date('n')-1];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +19,7 @@ $userDetails=$userClass->userDetails($session_uid);
 <div class="container">
 <div class="jumbotron">
   <h1 class="display-4">Listado</h1>
-  <p class="lead">Listado de Gastos del Mes Actual</p>  
+  <p class="lead">Listado de Gastos del Mes de <?php echo $mesActual; ?></p>  
   <h1>Bienvenido <?php echo $userDetails->name; ?></h1>  
 </div>
 <div class="col-sm-3 pull-right"><button type="button" class="btn btn-info" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
@@ -35,16 +37,6 @@ $userDetails=$userClass->userDetails($session_uid);
     <?php $first_day = date('Y-m-01');  ?>
     <?php listarGastosMes($first_day, $uid); ?>
     <!-- The Modal -->
-    <!-- <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">              
-        <div class="modal-body">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          <img src="" class="imagepreview" style="width: 100%;" >
-        </div>
-      </div>
-    </div>
-  </div> -->
   <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" data-dismiss="modal">
     <div class="modal-content"  >              
@@ -61,6 +53,41 @@ $userDetails=$userClass->userDetails($session_uid);
   </div>
 </div>
   <!-- Fin Modal -->
+  <!-- Modal Edicion de Gastos -->
+  <div id="add_data_Modal" class="modal fade">  
+      <div class="modal-dialog">  
+           <div class="modal-content">  
+                <div class="modal-header">  
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>  
+                     <h4 class="modal-title">Detalle de Gasto</h4>  
+                </div>  
+                <div class="modal-body">  
+                     <form method="post" id="insert_form">  
+                          <label>Monto</label>  
+                          <input type="number" name="monto" id="monto" class="form-control" />  
+                          <br />  
+                          <label>Observaciones</label>  
+                          <input type="text" name="observaciones" id="observaciones" class="form-control" />  
+                          <br />  
+                          <label>Tipo Gasto</label>  
+                          <input type="date" name="fecha" id="fecha" class="form-control" />  
+                          <br />
+                          <label class="col-8 col-md-6" id="tipoGasto"><i class="fas fa-dollar-sign"></i> Tipo de Gasto: </label>
+	                        <div class="col-sm-4 col-md-6">
+	                        <select class="custom-select" id="selectIng" name="tipoGasto" required></select> 	
+	                        </div>  
+                          <br />
+                          <input type="hidden" name="id" id="id" />  
+                          <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />  
+                     </form>  
+                </div>  
+                <div class="modal-footer">  
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
+                </div>  
+           </div>  
+      </div>  
+ </div>  
+  <!--Fin Modal Edicion de Gastos -->
 </table>
 </fieldset>
 <br><br>
@@ -98,6 +125,26 @@ $(function() {
           });
 
         });
+    $(".edit_data").on('click', function(){ 
+          console.log("Entró") ;
+           var id = $(this).attr("id");  
+           console.log(id);
+           $.ajax({  
+                url:"crud.php",  
+                method:"POST",  
+                data:{id:id},  
+                dataType:"json",  
+                success:function(data){  
+                     $('#monto').val(data.monto);                       
+                     $('#observaciones').val(data.observaciones);  
+                     $('#descripcion').val(data.fecha);  
+                     $('#selectIng').val(data.descripcion);
+                     $('#id').val(data.id);                       
+                     $('#insert').val("Update");  
+                     $('#add_data_Modal').modal('show');  
+                }  
+           });  
+    });     
 });
 </script>
 </body>
