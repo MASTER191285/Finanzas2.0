@@ -221,7 +221,8 @@
 					echo '<td>'. $row['observaciones'].'</td>';
 					echo '<td>'. $row['descripcion'].'</td>';
 					echo '<td>';					
-					echo "<button value='$row[id]' id='$row[id]' class='btn btn-info btn-xs edit_data'>Editar </button>";
+					// echo "<button value='$row[id]' id='$row[id]' class='btn btn-info btn-xs edit_data'>Editar </button>";
+					echo "<a href='actualizarGasto.php?id={$id}' class='btn btn-info btn-xs edit_data'>Editar </a>";
 					echo '<a href="#" value="id" id="eliminar" <i class="fas fa-trash-alt"> Eliminar</i></a>';
 					echo '</td>';
 					echo '</tr>';
@@ -230,6 +231,83 @@
 				die('ERROR: ' . $exception->getMessage());
 			}
 			
+		}
+
+		function gastoaActualizar($id){
+			
+			try {
+				getcwd();								
+				$db = getDB();
+				$query = "SELECT g.id, g.monto as monto, g.fecha as fecha, g.observaciones as observaciones, tg.descripcion as descripcion FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE g.id=:id";
+				$stmt = $db->prepare($query);
+				$stmt->bindParam("id", $id,PDO::PARAM_INT);
+				$stmt->execute();
+				$row = $stmt->fetch(PDO::FETCH_ASSOC);				
+				$monto = $row['monto'];
+				$fecha = $row['fecha'];
+				$observaciones = $row['observaciones'];
+				$descripcion = $row['descripcion'];
+				echo "				
+				<label class='col-sm-2' id='monto'><i class='far fa-money-bill-alt'></i> Monto: </label>
+				<div class='col-sm-4'>
+				  <input type='number' name='monto' value=$monto class='form-control' >
+				</div>
+				<hr>		
+				<label class='col-sm-4' id='fecha'><i class='fas fa-calendar-alt'></i> Fecha: </label>
+				<div class='col-sm-4'>
+				  <input type='date' required='' name='fecha' value=$fecha>
+				</div>
+				<hr>      
+				<label for='observaciones' id='observaciones'>Observaciones:</label>
+				<textarea class='form-control' id='observaciones' name='observaciones' rows='3' cols='30' maxlength='100'>$observaciones</textarea>
+				<hr>
+				";
+			} catch (PDOException $exception) {
+				die('ERROR: ' . $exception->getMessage());
+			}
+		}
+
+		function ActualizarGasto($id){
+
+			try {
+				getcwd();
+				$db = getDB();
+				$mensaje = "";
+				if ($_POST) {
+					$query = "UPDATE gastos SET 
+					monto=:monto,
+					fecha=:fecha,
+					observaciones=:observaciones,
+					id_tipo_gasto=:tipoGasto
+					WHERE id=:id";
+					$stmt = $db->prepare($query);
+					$monto=htmlspecialchars(strip_tags($_POST['monto']));
+					$fecha=$_POST['fecha'];
+					$observaciones=$_POST['observaciones'];
+					$tipoGasto=htmlspecialchars(strip_tags($_POST['tipoGasto']));
+					$stmt->bindParam("id", $id,PDO::PARAM_INT);
+					$stmt->bindParam(":monto", $monto);
+					$stmt->bindParam(":fecha", $fecha);
+					$stmt->bindParam(":observaciones", $observaciones);
+					$stmt->bindParam(":tipoGasto", $tipoGasto);					
+					if($stmt->execute()){
+						$mensaje = "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+						$mensaje.= "<strong>Exito!</strong> Gasto Modificado.";
+						$mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+						$mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";
+						echo $mensaje;
+					}else{
+						$mensaje = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>";
+						$mensaje.= "<strong>Error!</strong> Error al Modificar.";
+						$mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+						$mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";
+						echo $mensaje;
+					}
+				}
+
+			} catch (PDOException $exception) {
+				die('ERROR: ' . $exception->getMessage());
+			}
 		}
 
 

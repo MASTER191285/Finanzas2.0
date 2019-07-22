@@ -5,7 +5,7 @@ include('../session.php');
 $userDetails=$userClass->userDetails($session_uid);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 	<meta charset="UTF-8">
 	<title>Gastos</title>

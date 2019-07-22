@@ -7,7 +7,7 @@ $mesActual = $meses[date('n')-1];
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 	<meta charset="UTF-8">
 	<title>Listado de Gastos</title>
@@ -124,27 +124,7 @@ $(function() {
               'onDeny': function(alert){ console.log("falso"); return false; }
           });
 
-        });
-    $(".edit_data").on('click', function(){ 
-          console.log("Entró") ;
-           var id = $(this).attr("id");  
-           console.log(id);
-           $.ajax({  
-                url:"crud.php",  
-                method:"POST",  
-                data:{id:id},  
-                dataType:"json",  
-                success:function(data){  
-                     $('#monto').val(data.monto);                       
-                     $('#observaciones').val(data.observaciones);  
-                     $('#descripcion').val(data.fecha);  
-                     $('#selectIng').val(data.descripcion);
-                     $('#id').val(data.id);                       
-                     $('#insert').val("Update");  
-                     $('#add_data_Modal').modal('show');  
-                }  
-           });  
-    });     
+        });   
 });
 </script>
 </body>
