@@ -29,19 +29,7 @@
             $q2->setFetchMode(PDO::FETCH_ASSOC);            
           } catch (PDOException $e) {
             die("Error occurred:" . $e->getMessage());
-        }
-
-        /*try {
-          $db = getDB();
-          $parametro = $session_uid;
-          //execute the stored procedure
-          $sql = 'PORCENTAJES('.$parametro.')';
-          //call the stored procedure
-          $q3 = $db->query($sql);
-          $q3->setFetchMode(PDO::FETCH_ASSOC);          
-        } catch (PDOException $e) {
-          die("Error occurred:" . $e->getMessage());
-      }*/                       
+        }                    
         
 ?>
 <!DOCTYPE html>

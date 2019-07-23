@@ -1,5 +1,6 @@
 <?php
 require '../controllers/funciones.php';
+require '../controllers/crud.php';
 include('../db/config.php');
 include('../session.php');
 ?>
@@ -23,7 +24,7 @@ include('../session.php');
   <div class="col-sm-3 pull-right"><button type="button" class="btn btn-dark" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
 <fieldset>	
 	<legend id="titulo">Gasto a Modificar</legend>
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}");?>" method="POST">
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}");?>" method="POST" enctype="multipart/form-data">
     <div class="form-group">        
             <?php gastoaActualizar($id); ?>    
             <?php ActualizarGasto($id); ?>
@@ -46,5 +47,6 @@ include('../session.php');
 <!-- Latest compiled JavaScript -->
 <script src="../css/dist/js/bootstrap.min.js"></script>	
 <script src="../css/js/src/util.js"></script>
+
 </body>
 </html>

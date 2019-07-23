@@ -1,6 +1,14 @@
 <?php 
 		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
-		$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");		
+		$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+		if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])){
+			switch ($_REQUEST['action']) {
+				case 'eliminarGasto':
+				$valor = $_REQUEST['valor'];
+				return eliminarGasto($valor);
+				break;
+			}
+		}
 		#region AlimentaCombos
 		function getTipoIngreso(){
 
@@ -220,10 +228,10 @@
 					echo "<td>"."<a href='#'' class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
 					echo '<td>'. $row['observaciones'].'</td>';
 					echo '<td>'. $row['descripcion'].'</td>';
-					echo '<td>';					
-					// echo "<button value='$row[id]' id='$row[id]' class='btn btn-info btn-xs edit_data'>Editar </button>";
+					echo '<td>';										
 					echo "<a href='actualizarGasto.php?id={$id}' class='btn btn-info btn-xs edit_data'>Editar </a>";
-					echo '<a href="#" value="id" id="eliminar" <i class="fas fa-trash-alt"> Eliminar</i></a>';
+					//echo '<a href="#" value="id" id="eliminar" <i class="fas fa-trash-alt"> Eliminar</i></a>';
+					echo "<button value='{$id}' data-target='modalEliminar' class='btn btn-danger btn-xs delete_data'>Eliminar</button>";
 					echo '</td>';
 					echo '</tr>';
 				}
@@ -238,7 +246,7 @@
 			try {
 				getcwd();								
 				$db = getDB();
-				$query = "SELECT g.id, g.monto as monto, g.fecha as fecha, g.observaciones as observaciones, tg.descripcion as descripcion FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE g.id=:id";
+				$query = "SELECT g.id, g.monto as monto, g.fecha as fecha, g.observaciones as observaciones, g.comprobante as comprobante, tg.descripcion as descripcion FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE g.id=:id";
 				$stmt = $db->prepare($query);
 				$stmt->bindParam("id", $id,PDO::PARAM_INT);
 				$stmt->execute();
@@ -247,7 +255,8 @@
 				$fecha = $row['fecha'];
 				$observaciones = $row['observaciones'];
 				$descripcion = $row['descripcion'];
-				echo "				
+				$comprobante = $row['comprobante'];
+				echo "								
 				<label class='col-sm-2' id='monto'><i class='far fa-money-bill-alt'></i> Monto: </label>
 				<div class='col-sm-4'>
 				  <input type='number' name='monto' value=$monto class='form-control' >
@@ -261,6 +270,12 @@
 				<label for='observaciones' id='observaciones'>Observaciones:</label>
 				<textarea class='form-control' id='observaciones' name='observaciones' rows='3' cols='30' maxlength='100'>$observaciones</textarea>
 				<hr>
+				<label class='col-sm-2' id='comprobante'><i class='fas fa-file-upload'></i> Comprobante: </label>
+				<div class='col-sm-4'>
+				  <input type='file'  name='comprobante'>
+				  <input type='hidden' name='imagen-guardada' value=$comprobante>
+				</div>
+				<hr>
 				";
 			} catch (PDOException $exception) {
 				die('ERROR: ' . $exception->getMessage());
@@ -272,31 +287,47 @@
 			try {
 				getcwd();
 				$db = getDB();
-				$mensaje = "";
+				$mensaje = "";				
 				if ($_POST) {
+
 					$query = "UPDATE gastos SET 
 					monto=:monto,
 					fecha=:fecha,
 					observaciones=:observaciones,
+					comprobante=:comprobante,
 					id_tipo_gasto=:tipoGasto
 					WHERE id=:id";
+
 					$stmt = $db->prepare($query);
+
 					$monto=htmlspecialchars(strip_tags($_POST['monto']));
 					$fecha=$_POST['fecha'];
 					$observaciones=$_POST['observaciones'];
-					$tipoGasto=htmlspecialchars(strip_tags($_POST['tipoGasto']));
+					$comprobante_guardado=$_POST['imagen-guardada'];
+					$comprobante=$_FILES['comprobante'];
+					$tipoGasto=htmlspecialchars(strip_tags($_POST['tipoGasto']));	
+					if (empty($comprobante['name'])) {
+						$comprobante = $comprobante_guardado;
+					}else {
+						$archivo_subido = "../uploads/" . $_FILES['comprobante']['name'];
+						move_uploaded_file($_FILES['comprobante']['tmp_name'], $archivo_subido);
+						$comprobante = $_FILES['comprobante']['name'];
+					}			
 					$stmt->bindParam("id", $id,PDO::PARAM_INT);
 					$stmt->bindParam(":monto", $monto);
 					$stmt->bindParam(":fecha", $fecha);
 					$stmt->bindParam(":observaciones", $observaciones);
-					$stmt->bindParam(":tipoGasto", $tipoGasto);					
-					if($stmt->execute()){
+					$stmt->bindParam(":comprobante", $comprobante);
+					$stmt->bindParam(":tipoGasto", $tipoGasto);
+												
+					if($stmt->execute()){						
 						$mensaje = "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
 						$mensaje.= "<strong>Exito!</strong> Gasto Modificado.";
 						$mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
-						$mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";
-						echo $mensaje;
-					}else{
+						$mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";						
+						echo $mensaje;						
+						header('location: ../views/listarGastos.php');
+					}else{						
 						$mensaje = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>";
 						$mensaje.= "<strong>Error!</strong> Error al Modificar.";
 						$mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
@@ -311,23 +342,13 @@
 		}
 
 
-		function eliminarGasto(){
-			
-			try {
-				getcwd();				
-				$db = getDB();
-				$id= isset($_GET['id']) ? $_GET['id'] : die('Registro no encontrado.');
-				$query = "DELETE FROM gastos WHERE id = ?";
-				$stmt = $db->prepare($query);
-				$stmt->bindParam(1, $id);     
-					if ($stmt->execute()) {
-						header('location: ../views/listarGastos.php?action=eliminar');
-					}else{
-						die('Error al Eliminar');
-					}
-			} catch (PDOException $exception) {
-				die('ERROR: ' . $exception->getMessage());
-			}
+		function eliminarGasto($id){
+			getcwd();
+			$db = getDB();
+			$sql = "DELETE FROM gastos WHERE id:=$id";
+			$stmt = $db->prepare($query);
+			$stmt->bindParam("id", $id, PDO::PARAM_INT);
+			$stmt->execute();
 		}
 
 		function detalleDiario($uid){

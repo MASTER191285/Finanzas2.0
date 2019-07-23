@@ -14,6 +14,13 @@ $mesActual = $meses[date('n')-1];
 	<link rel="stylesheet" href="../css/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	<link rel="stylesheet" href="../css/estilos.css">	
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../js/jalert/src/jAlert.css">     
+  <script type="text/javascript" src="../js/jalert/src/jAlert.js"></script>
+  <script type="text/javascript" src="../js/jalert/src/jAlert-functions.js"></script>
 </head>
 <body class="bg-dark">
 <div class="container">
@@ -53,47 +60,39 @@ $mesActual = $meses[date('n')-1];
   </div>
 </div>
   <!-- Fin Modal -->
-  <!-- Modal Edicion de Gastos -->
-  <div id="add_data_Modal" class="modal fade">  
-      <div class="modal-dialog">  
-           <div class="modal-content">  
-                <div class="modal-header">  
-                     <button type="button" class="close" data-dismiss="modal">&times;</button>  
-                     <h4 class="modal-title">Detalle de Gasto</h4>  
-                </div>  
-                <div class="modal-body">  
-                     <form method="post" id="insert_form">  
-                          <label>Monto</label>  
-                          <input type="number" name="monto" id="monto" class="form-control" />  
-                          <br />  
-                          <label>Observaciones</label>  
-                          <input type="text" name="observaciones" id="observaciones" class="form-control" />  
-                          <br />  
-                          <label>Tipo Gasto</label>  
-                          <input type="date" name="fecha" id="fecha" class="form-control" />  
-                          <br />
-                          <label class="col-8 col-md-6" id="tipoGasto"><i class="fas fa-dollar-sign"></i> Tipo de Gasto: </label>
-	                        <div class="col-sm-4 col-md-6">
-	                        <select class="custom-select" id="selectIng" name="tipoGasto" required></select> 	
-	                        </div>  
-                          <br />
-                          <input type="hidden" name="id" id="id" />  
-                          <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />  
-                     </form>  
-                </div>  
-                <div class="modal-footer">  
-                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  
-                </div>  
-           </div>  
-      </div>  
- </div>  
-  <!--Fin Modal Edicion de Gastos -->
+  <!-- modal de Eliminar-->
+ <div id="modalEliminar" class="modal">
+    <div class="modal-content">
+    <h3>¿Esta seguro de eliminar al Gasto Seleccionado?</h3>
+    </div>
+    <div class="modal-footer row">
+    <button class="btn modal-action modal-close waves-effect waves-orange orange accent-4 col s2" id="modalCancel" >Cancelar</button>
+      <button class="btn modal-action modal-close waves-effect waves-orange orange accent-4 col s2" id="modalOK">Aceptar</button>
+    </div>
+  </div>
+  <!-- Modal de Gasto Eliminaro-->
+  <div id="modalGastoEliminado" class="modal">
+    <div class="modal-content">
+    <h3>¡ EXITO !</h3>
+      SE HA ELIMINADO
+    </div>
+    <div class="modal-footer">
+      <button class=" modal-action modal-close waves-effect waves-green btn-flat">Aceptar</button>
+    </div>
+  </div>
+  <!-- Modal de Cliente No Eliminado-->
+  <div id="modalGastoNOEliminado" class="modal">
+    <div class="modal-content">
+    <h3>¡ ERROR !</h3>
+      No se ha logrado eliminar al Gasto
+    </div>
+    <div class="modal-footer">
+      <button class=" modal-action modal-close waves-effect waves-green btn-flat">Aceptar</button>
+    </div>
 </table>
 </fieldset>
 <br><br>
 </div>	
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
@@ -107,24 +106,25 @@ $(function() {
 			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
 			$('#imagemodal').modal('show');   
     });
-    
-    //Eliminar
-    $("#eliminar").on("click" ,function(){
-            //console.log('ingreso');
-            var padre = $(this).children("i").parent()[0];
-            padre = $(padre).attr("value");
-            console.log(padre);
-            $.jAlert({
-              'size': 'md',
-              'type': 'confirm',
-              'confirmQuestion':'¿Esta seguro?',
-              'showAnimation': 'fadeInUp',
-              'hideAnimation': 'fadeOutDown',
-              'onConfirm': function(e, btn){ e.preventDefault(); window.location = '../controllers/funciones.php?id=' + padre; return false; },
-              'onDeny': function(alert){ console.log("falso"); return false; }
-          });
 
-        });   
+    $(".eliminar").on("click",function(){
+        var id = this.value;
+        $("#modalOK").click(function(){
+         $.ajax({
+                    url: "../controllers/funciones.php",
+                   type: "post",
+                    data: {action: "eliminarGasto",valor:id},
+                   success: function(data){
+                    if (data==true) {
+                        $('#modalGastoEliminado').openModal({complete: function(){location.reload();}});
+                    }else{
+                        $('#modalGastoNOEliminado').openModal();
+                    }
+                }
+            });
+        })
+    }).leanModal();
+
 });
 </script>
 </body>
