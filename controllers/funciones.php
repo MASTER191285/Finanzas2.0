@@ -1,14 +1,7 @@
 <?php 
 		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
 		$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-		if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])){
-			switch ($_REQUEST['action']) {
-				case 'eliminarGasto':
-				$valor = $_REQUEST['valor'];
-				return eliminarGasto($valor);
-				break;
-			}
-		}
+
 		#region AlimentaCombos
 		function getTipoIngreso(){
 
@@ -230,8 +223,8 @@
 					echo '<td>'. $row['descripcion'].'</td>';
 					echo '<td>';										
 					echo "<a href='actualizarGasto.php?id={$id}' class='btn btn-info btn-xs edit_data'>Editar </a>";
-					//echo '<a href="#" value="id" id="eliminar" <i class="fas fa-trash-alt"> Eliminar</i></a>';
-					echo "<button value='{$id}' data-target='modalEliminar' class='btn btn-danger btn-xs delete_data'>Eliminar</button>";
+					echo "<a href='javascript:void(0)' data-id='{$id}' class='btn btn-danger btn-xs eliminar'>Eliminar </a>";
+					//echo "<button data-g-id='{$id}' data-target='modalEliminar' class='btn btn-danger btn-xs eliminar'>Eliminar</button>";
 					echo '</td>';
 					echo '</tr>';
 				}
@@ -341,14 +334,44 @@
 			}
 		}
 
+		if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])){
+			if($_REQUEST['action'] == 'eliminarGasto')
+			{
+				$valor = $_REQUEST['valor'];
+				return eliminarGasto($valor);
+			}
 
+		}
 		function eliminarGasto($id){
-			getcwd();
-			$db = getDB();
-			$sql = "DELETE FROM gastos WHERE id:=$id";
-			$stmt = $db->prepare($query);
-			$stmt->bindParam("id", $id, PDO::PARAM_INT);
-			$stmt->execute();
+			//echo "Ingresó";
+
+			try {
+				require_once('../db/config.php');
+				$mensaje = "";
+				getcwd();
+				$db = getDB();
+				$query = "DELETE FROM gastos WHERE id=:id";
+				$stmt = $db->prepare($query);
+				$stmt->bindParam("id", $id, PDO::PARAM_INT);
+				$stmt->execute();
+				if ($stmt->execute()) {
+					$mensaje = "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
+					$mensaje.= "<strong>Exito!</strong> Gasto Eliminado.";
+					$mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+					$mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";						
+					echo $mensaje;
+				}else{
+					$mensaje = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>";
+					$mensaje.= "<strong>Error!</strong> Error al Eliminar.";
+					$mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
+					$mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";
+					echo $mensaje;
+				}
+			} catch (PDOException $exception) {
+				die('ERROR: ' . $exception->getMessage());
+			}
+
+			return $mensaje;
 		}
 
 		function detalleDiario($uid){

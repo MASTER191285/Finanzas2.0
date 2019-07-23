@@ -17,10 +17,8 @@ $mesActual = $meses[date('n')-1];
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-  <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="../js/jalert/src/jAlert.css">     
-  <script type="text/javascript" src="../js/jalert/src/jAlert.js"></script>
-  <script type="text/javascript" src="../js/jalert/src/jAlert-functions.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>  
+  <script type="text/javascript" src="../js/bootbox/bootbox.min.js"></script>
 </head>
 <body class="bg-dark">
 <div class="container">
@@ -60,35 +58,6 @@ $mesActual = $meses[date('n')-1];
   </div>
 </div>
   <!-- Fin Modal -->
-  <!-- modal de Eliminar-->
- <div id="modalEliminar" class="modal">
-    <div class="modal-content">
-    <h3>¿Esta seguro de eliminar al Gasto Seleccionado?</h3>
-    </div>
-    <div class="modal-footer row">
-    <button class="btn modal-action modal-close waves-effect waves-orange orange accent-4 col s2" id="modalCancel" >Cancelar</button>
-      <button class="btn modal-action modal-close waves-effect waves-orange orange accent-4 col s2" id="modalOK">Aceptar</button>
-    </div>
-  </div>
-  <!-- Modal de Gasto Eliminaro-->
-  <div id="modalGastoEliminado" class="modal">
-    <div class="modal-content">
-    <h3>¡ EXITO !</h3>
-      SE HA ELIMINADO
-    </div>
-    <div class="modal-footer">
-      <button class=" modal-action modal-close waves-effect waves-green btn-flat">Aceptar</button>
-    </div>
-  </div>
-  <!-- Modal de Cliente No Eliminado-->
-  <div id="modalGastoNOEliminado" class="modal">
-    <div class="modal-content">
-    <h3>¡ ERROR !</h3>
-      No se ha logrado eliminar al Gasto
-    </div>
-    <div class="modal-footer">
-      <button class=" modal-action modal-close waves-effect waves-green btn-flat">Aceptar</button>
-    </div>
 </table>
 </fieldset>
 <br><br>
@@ -107,24 +76,46 @@ $(function() {
 			$('#imagemodal').modal('show');   
     });
 
-    $(".eliminar").on("click",function(){
-        var id = this.value;
-        $("#modalOK").click(function(){
-         $.ajax({
-                    url: "../controllers/funciones.php",
-                   type: "post",
-                    data: {action: "eliminarGasto",valor:id},
-                   success: function(data){
-                    if (data==true) {
-                        $('#modalGastoEliminado').openModal({complete: function(){location.reload();}});
-                    }else{
-                        $('#modalGastoNOEliminado').openModal();
-                    }
-                }
-            });
-        })
-    }).leanModal();
 
+    $(".eliminar").on("click",function(e){      
+      e.preventDefault();
+      var id = $(this).attr('data-id');      
+      var parent = $(this).parent("td").parent("tr");
+      bootbox.confirm("Are you sure?", function(result) {
+        bootbox.dialog({
+        message: "I am a custom dialog",
+        title: "Custom title",
+          buttons: {
+            success: {
+              label: "No!",
+              className: "btn-success",
+              callback: function() {
+                // cancel button, close dialog box
+                  $('.bootbox').modal('hide');
+              }
+            },
+            danger: {
+              label: "Delete!",
+              className: "btn-danger",
+              callback: function() {
+                $.ajax({                  
+                    type: 'POST',
+                    url: '../controllers/funciones.php',
+                    data: {action: "eliminarGasto",valor:id},
+                })
+                .done(function(response){
+                    bootbox.alert(response);
+                    parent.fadeOut('slow');                                       
+                })
+                .fail(function(){
+                    bootbox.alert('Something Went Wrog ....');
+                })
+              }
+            }
+          }
+        });
+      });
+    });
 });
 </script>
 </body>

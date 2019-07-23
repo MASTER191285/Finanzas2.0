@@ -1,6 +1,5 @@
 <?php
 require '../controllers/funciones.php';
-require '../controllers/crud.php';
 include('../db/config.php');
 include('../session.php');
 ?>
