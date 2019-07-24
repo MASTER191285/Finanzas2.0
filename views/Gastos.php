@@ -20,7 +20,7 @@ $userDetails=$userClass->userDetails($session_uid);
   <p class="lead">Registro de Gastos Diarios - Semanales - Mensuales</p>  
   <h1>Bienvenido <?php echo $userDetails->name; ?></h1>  
 </div>
-  <div class="col-sm-3 pull-right"><button type="button" class="btn btn-dark" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
+  <div class="col-sm-3 pull-right"><button type="button" class="btn btn-secondary volver" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
 <fieldset>	
 	<legend id="titulo">Gasto a Registrar</legend>
 	<?php 
@@ -30,6 +30,11 @@ $userDetails=$userClass->userDetails($session_uid);
 	?>
 	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" enctype="multipart/form-data">
 	  <div class="form-group">
+	  <label class="col-8 col-md-6" id="tipoGasto"><i class="fas fa-dollar-sign"></i> Tipo de Gasto: </label>
+	  <div class="col-sm-2 col-md-4">
+	      <select class="custom-select" id="selectIng" name="tipoGasto" required><?php getTipoGasto(); ?></select> 	
+		</div>
+		<hr>
 	    <label class="col-sm-2" id="monto"><i class="far fa-money-bill-alt"></i> Monto: </label>
 	    <div class="col-sm-4">
 	      <input type="number" name="monto" required>
@@ -45,10 +50,6 @@ $userDetails=$userClass->userDetails($session_uid);
 	      <input type="file"  name="comprobante" id="archivo">
 	    </div>
 	    <hr>	    
-	    <label class="col-8 col-md-6" id="tipoGasto"><i class="fas fa-dollar-sign"></i> Tipo de Gasto: </label>
-	    <div class="col-sm-4 col-md-6">
-	      <select class="custom-select" id="selectIng" name="tipoGasto" required><?php getTipoGasto(); ?></select> 	
-	    </div>
 	    <hr>
 	    <input type="hidden" name="id_user" id="id_user" value="<?php echo $session_uid ?>">	    
 	    <label for="comment" id="observaciones">Observaciones:</label>

@@ -206,10 +206,16 @@
 			try {
 				getcwd();								
 				$db = getDB();
-				$query = 'SELECT g.id, g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN :fechaini AND CURDATE() AND id_usuario=:id_usuario ORDER BY g.fecha';
+				$page = isset($_GET['page']) ? $_GET['page'] : 1;
+				$records_per_page = 10;
+				$from_record_num = ($records_per_page * $page) - $records_per_page;
+				$query = 'SELECT g.id, g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN 
+				tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN :fechaini AND CURDATE() AND id_usuario=:id_usuario ORDER BY g.fecha LIMIT :from_record_num, :records_per_page';
 				$stmt = $db->prepare($query);
 				$stmt->bindParam("fechaini", $fecha, PDO::PARAM_STR, 10);
 				$stmt->bindParam("id_usuario", $uid,PDO::PARAM_INT);
+				$stmt->bindParam(":from_record_num", $from_record_num, PDO::PARAM_INT);
+				$stmt->bindParam(":records_per_page", $records_per_page, PDO::PARAM_INT);
 				$stmt->execute();
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					extract($row);
@@ -222,12 +228,24 @@
 					echo '<td>'. $row['observaciones'].'</td>';
 					echo '<td>'. $row['descripcion'].'</td>';
 					echo '<td>';										
-					echo "<a href='actualizarGasto.php?id={$id}' class='btn btn-info btn-xs edit_data'>Editar </a>";
+					echo "<a href='actualizarGasto.php?id={$id}' class='btn btn-info btn-xs editar'>Editar </a>";
 					echo "<a href='javascript:void(0)' data-id='{$id}' class='btn btn-danger btn-xs eliminar'>Eliminar </a>";
 					//echo "<button data-g-id='{$id}' data-target='modalEliminar' class='btn btn-danger btn-xs eliminar'>Eliminar</button>";
 					echo '</td>';
 					echo '</tr>';
 				}
+				// PAGINATION
+				// count total number of rows
+				$query = "SELECT COUNT(*) as total_rows FROM gastos";
+				$stmt = $db->prepare($query);				
+				// execute query
+				$stmt->execute();				
+				// get total rows
+				$row = $stmt->fetch(PDO::FETCH_ASSOC);
+				$total_rows = $row['total_rows'];
+				$page_url="listarGastos.php?";
+				include_once "paginacion.php";
+
 			} catch (PDOException $exception) {
 				die('ERROR: ' . $exception->getMessage());
 			}
@@ -261,7 +279,7 @@
 				</div>
 				<hr>      
 				<label for='observaciones' id='observaciones'>Observaciones:</label>
-				<textarea class='form-control' id='observaciones' name='observaciones' rows='3' cols='30' maxlength='100'>$observaciones</textarea>
+				<textarea class='form-control' id='txtObservaciones' name='observaciones' rows='3' cols='30' maxlength='100'>$observaciones</textarea>
 				<hr>
 				<label class='col-sm-2' id='comprobante'><i class='fas fa-file-upload'></i> Comprobante: </label>
 				<div class='col-sm-4'>
@@ -343,7 +361,6 @@
 
 		}
 		function eliminarGasto($id){
-			//echo "Ingresó";
 
 			try {
 				require_once('../db/config.php');
@@ -356,15 +373,11 @@
 				$stmt->execute();
 				if ($stmt->execute()) {
 					$mensaje = "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-					$mensaje.= "<strong>Exito!</strong> Gasto Eliminado.";
-					$mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
-					$mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";						
+					$mensaje.= "<strong>Exito!</strong> Gasto Eliminado.";					
 					echo $mensaje;
 				}else{
 					$mensaje = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>";
 					$mensaje.= "<strong>Error!</strong> Error al Eliminar.";
-					$mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
-					$mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";
 					echo $mensaje;
 				}
 			} catch (PDOException $exception) {

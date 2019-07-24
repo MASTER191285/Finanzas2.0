@@ -27,7 +27,7 @@ $mesActual = $meses[date('n')-1];
   <p class="lead">Listado de Gastos del Mes de <?php echo $mesActual; ?></p>  
   <h1>Bienvenido <?php echo $userDetails->name; ?></h1>  
 </div>
-<div class="col-sm-3 pull-right"><button type="button" class="btn btn-info" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
+<div class="col-sm-3 pull-right"><button type="button" class="btn btn-info volver" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
 <fieldset>	
 <table class="table table-striped table-dark">
     <tr>
@@ -81,21 +81,13 @@ $(function() {
       e.preventDefault();
       var id = $(this).attr('data-id');      
       var parent = $(this).parent("td").parent("tr");
-      bootbox.confirm("Are you sure?", function(result) {
-        bootbox.dialog({
-        message: "I am a custom dialog",
-        title: "Custom title",
+      //bootbox.confirm("Are you sure?", function(result) {
+      bootbox.dialog({
+        message: "¿Seguro que desea eliminar?",
+        title: "Eliminar Gasto",
           buttons: {
-            success: {
-              label: "No!",
-              className: "btn-success",
-              callback: function() {
-                // cancel button, close dialog box
-                  $('.bootbox').modal('hide');
-              }
-            },
             danger: {
-              label: "Delete!",
+              label: "Si",
               className: "btn-danger",
               callback: function() {
                 $.ajax({                  
@@ -108,13 +100,20 @@ $(function() {
                     parent.fadeOut('slow');                                       
                 })
                 .fail(function(){
-                    bootbox.alert('Something Went Wrog ....');
+                    bootbox.alert('Error al eliminar ....');
                 })
+              }
+            },
+            success: {
+              label: "No",
+              className: "btn-success",
+              callback: function() {
+                // cancel button, close dialog box
+                  $('.bootbox').modal('hide');
               }
             }
           }
         });
-      });
     });
 });
 </script>

@@ -7,6 +7,8 @@
 
 #txtObservaciones{
 	resize: none;
+	width: 50%;
+		
 }
 
 #comprobante {
@@ -17,3 +19,21 @@
   
   #comprobante:hover {opacity: 0.7;}
   
+a .editar{
+	padding: 50px;
+	/*margin: 2px;*/
+}
+
+a .eliminar{
+	margin-right: 20px;
+	padding: 50px;
+}
+
+.volver{
+	margin-bottom: 35px;
+	display: block;
+}
+
+hr{
+	color: #abb2b9;
+}
