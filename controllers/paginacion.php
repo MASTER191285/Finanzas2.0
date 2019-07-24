@@ -1,5 +1,5 @@
 <?php
-echo "<ul class='pagination pull-left margin-zero mt0'>";
+echo "<ul class='pagination'>";
  
 // first page button will be here
 if($page>1){
@@ -7,13 +7,15 @@ if($page>1){
     $prev_page = $page - 1;
     echo "<li>";
         echo "<a href='{$page_url}page={$prev_page}'>";
-            echo "<span style='margin:0 .5em;'>&laquo;</span>";
+            echo "<span class='previous'>&laquo;</span>";            
         echo "</a>";
     echo "</li>";
 }
 // clickable page numbers will be here
 // find out total pages
+//var_dump($total_pages);
 $total_pages = ceil($total_rows / $records_per_page);
+
  
 // range of num links to show
 $range = 1;
@@ -30,14 +32,14 @@ for ($x=$initial_num; $x<$condition_limit_num; $x++) {
         // current page
         if ($x == $page) {
             echo "<li class='active'>";
-                echo "<a href='javascript::void();'>{$x}</a>";
+                echo "<a href='javascript::void();' class='current'>{$x}</a>";
             echo "</li>";
         }
  
         // not current page
         else {
             echo "<li>";
-                echo " <a href='{$page_url}page={$x}'>{$x}</a> ";
+                echo " <a href='{$page_url}page={$x}' class='notcurrent'>{$x}</a> ";
             echo "</li>";
         }
     }
@@ -48,9 +50,10 @@ if($page<$total_pages){
  
     echo "<li>";
         echo "<a href='{$page_url}page={$next_page}'>";
-            echo "<span style='margin:0 .5em;'>&raquo;</span>";
+            echo "<span class='next'>&raquo;</span>";            
         echo "</a>";
     echo "</li>";
 }
 echo "</ul>";
+echo "</div>";
 ?>

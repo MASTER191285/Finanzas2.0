@@ -41,6 +41,7 @@ $mesActual = $meses[date('n')-1];
     <?php $uid = $userDetails->uid; ?>
     <?php $first_day = date('Y-m-01');  ?>
     <?php listarGastosMes($first_day, $uid); ?>
+    <!-- </table>     -->
     <!-- The Modal -->
   <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" data-dismiss="modal">
@@ -58,7 +59,6 @@ $mesActual = $meses[date('n')-1];
   </div>
 </div>
   <!-- Fin Modal -->
-</table>
 </fieldset>
 <br><br>
 </div>	

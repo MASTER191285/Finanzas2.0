@@ -37,3 +37,30 @@ a .eliminar{
 hr{
 	color: #abb2b9;
 }
+
+.pagination {
+    clear:both;
+    position:relative;
+    font-size:11px;
+    text-align:center;
+}
+
+.pagination span, .pagination a{
+    display:inline-block;
+    margin: 2px 2px 2px 0;
+    padding: 6px 9px 5px 9px;
+    text-decoration:none;
+    color: #ddd;
+    background: #222;
+}
+
+.pagination .current{
+    padding: 20px 20px 9px 20px;
+    font-weight: bold;
+    background: #0950E8;
+}
+
+.pagination .notcurrent{
+    padding: 20px 20px 9px 20px;
+    font-weight: bold;    
+}

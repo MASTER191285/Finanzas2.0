@@ -232,8 +232,9 @@
 					echo "<a href='javascript:void(0)' data-id='{$id}' class='btn btn-danger btn-xs eliminar'>Eliminar </a>";
 					//echo "<button data-g-id='{$id}' data-target='modalEliminar' class='btn btn-danger btn-xs eliminar'>Eliminar</button>";
 					echo '</td>';
-					echo '</tr>';
+					echo '</tr>';					
 				}
+				echo '</table>';
 				// PAGINATION
 				// count total number of rows
 				$query = "SELECT COUNT(*) as total_rows FROM gastos";
