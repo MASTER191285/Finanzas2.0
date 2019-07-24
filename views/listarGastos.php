@@ -15,9 +15,10 @@ $mesActual = $meses[date('n')-1];
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	<link rel="stylesheet" href="../css/estilos.css">	
   <!-- jQuery library -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-  <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
+  <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>  
+  <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>            
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />    
   <script type="text/javascript" src="../js/bootbox/bootbox.min.js"></script>
 </head>
 <body class="bg-dark">
@@ -29,7 +30,8 @@ $mesActual = $meses[date('n')-1];
 </div>
 <div class="col-sm-3 pull-right"><button type="button" class="btn btn-info volver" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
 <fieldset>	
-<table class="table table-striped table-dark">
+<table class="table table-bordered table-dark" id="listadoGastos">
+<thead>
     <tr>
         <th scope="col">Monto</th>
         <th scope="col">Fecha</th>
@@ -38,10 +40,13 @@ $mesActual = $meses[date('n')-1];
         <th scope="col">Tipo de Gasto</th>
         <th scope="col">Opciones</th>
     </tr>
+  </thead>
     <?php $uid = $userDetails->uid; ?>
     <?php $first_day = date('Y-m-01');  ?>
+   <tbody> 
     <?php listarGastosMes($first_day, $uid); ?>
-    <!-- </table>     -->
+   </tbody>
+    </table>    
     <!-- The Modal -->
   <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" data-dismiss="modal">
@@ -66,17 +71,21 @@ $mesActual = $meses[date('n')-1];
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="../css/dist/js/bootstrap.min.js"></script>	
+<script src="..js/datatables/jquery.dataTables.js"></script>
+<script src="..js/datatables/dataTables.bootstrap.js"></script>
 <script src="../css/js/src/util.js"></script>
 <script>
 // Get the modal
 $(function() {   
+    /*Script PopUP Imagen*/
 		$('.pop').on('click', function() {
       //console.log('entro');
 			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
 			$('#imagemodal').modal('show');   
     });
+    /*Fin Script PopUP Imagen*/
 
-
+    /*Script Eliminar*/
     $(".eliminar").on("click",function(e){      
       e.preventDefault();
       var id = $(this).attr('data-id');      
@@ -115,6 +124,36 @@ $(function() {
           }
         });
     });
+    /*Fin Script Eliminar*/
+    
+    /*Script Listado*/
+    $('#listadoGastos').DataTable({
+        "language":  {
+          "sProcessing":     "Procesando...",
+          "sLengthMenu":     "Mostrar _MENU_ registros",
+          "sZeroRecords":    "No se encontraron resultados",
+          "sEmptyTable":     "Ningún dato disponible en esta tabla",
+          "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+          "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+          "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix":    "",
+          "sSearch":         "Buscar:",
+          "sUrl":            "",
+          "sInfoThousands":  ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+            "sFirst":    "Primero",
+            "sLast":     "Último",
+            "sNext":     "Siguiente",
+            "sPrevious": "Anterior"
+          },
+          "oAria": {
+						"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+						"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+					}
+        }
+      }); 
+    /*Fin Script Listado*/
 });
 </script>
 </body>

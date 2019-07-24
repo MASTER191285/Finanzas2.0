@@ -206,23 +206,23 @@
 			try {
 				getcwd();								
 				$db = getDB();
-				$page = isset($_GET['page']) ? $_GET['page'] : 1;
-				$records_per_page = 10;
-				$from_record_num = ($records_per_page * $page) - $records_per_page;
+				// $page = isset($_GET['page']) ? $_GET['page'] : 1;
+				// $records_per_page = 10;
+				// $from_record_num = ($records_per_page * $page) - $records_per_page;
 				$query = 'SELECT g.id, g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN 
-				tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN :fechaini AND CURDATE() AND id_usuario=:id_usuario ORDER BY g.fecha LIMIT :from_record_num, :records_per_page';
+				tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE fecha BETWEEN :fechaini AND CURDATE() AND id_usuario=:id_usuario ORDER BY g.fecha';
 				$stmt = $db->prepare($query);
 				$stmt->bindParam("fechaini", $fecha, PDO::PARAM_STR, 10);
 				$stmt->bindParam("id_usuario", $uid,PDO::PARAM_INT);
-				$stmt->bindParam(":from_record_num", $from_record_num, PDO::PARAM_INT);
-				$stmt->bindParam(":records_per_page", $records_per_page, PDO::PARAM_INT);
+				// $stmt->bindParam(":from_record_num", $from_record_num, PDO::PARAM_INT);
+				// $stmt->bindParam(":records_per_page", $records_per_page, PDO::PARAM_INT);
 				$stmt->execute();
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					extract($row);
 					echo '<tr>';
 					//echo '<td>'. money_format('%i', $row['monto']).'</td>';
 					echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';
-					echo '<td>'. $row['fecha'].'</td>';					
+					echo '<td>'. date("d/m/Y", strtotime($row['fecha'])).'</td>';					
 					//echo "<td>"."<img width='100px' alt='sin imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</td>";
 					echo "<td>"."<a href='#'' class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
 					echo '<td>'. $row['observaciones'].'</td>';
@@ -234,18 +234,18 @@
 					echo '</td>';
 					echo '</tr>';					
 				}
-				echo '</table>';
+				// echo '</table>';
 				// PAGINATION
 				// count total number of rows
-				$query = "SELECT COUNT(*) as total_rows FROM gastos";
-				$stmt = $db->prepare($query);				
-				// execute query
-				$stmt->execute();				
-				// get total rows
-				$row = $stmt->fetch(PDO::FETCH_ASSOC);
-				$total_rows = $row['total_rows'];
-				$page_url="listarGastos.php?";
-				include_once "paginacion.php";
+				// $query = "SELECT COUNT(*) as total_rows FROM gastos";
+				// $stmt = $db->prepare($query);				
+				// // execute query
+				// $stmt->execute();				
+				// // get total rows
+				// $row = $stmt->fetch(PDO::FETCH_ASSOC);
+				// $total_rows = $row['total_rows'];
+				// $page_url="listarGastos.php?";
+				// include_once "paginacion.php";
 
 			} catch (PDOException $exception) {
 				die('ERROR: ' . $exception->getMessage());
