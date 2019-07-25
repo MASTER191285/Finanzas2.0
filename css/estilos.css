@@ -1,4 +1,13 @@
 
+body{
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+}
+
 .errorMsg{color: #cc0000;margin-bottom: 10px}
 
 #titulo, #monto, #fecha, #tipoIngreso, #observaciones, #comprobante, #archivo, #tipoGasto{

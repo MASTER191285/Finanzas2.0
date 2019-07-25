@@ -219,18 +219,15 @@
 				$stmt->execute();
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					extract($row);
-					echo '<tr>';
-					//echo '<td>'. money_format('%i', $row['monto']).'</td>';
+					echo '<tr>';					
 					echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';
-					echo '<td>'. date("d/m/Y", strtotime($row['fecha'])).'</td>';					
-					//echo "<td>"."<img width='100px' alt='sin imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</td>";
+					echo '<td>'. date("d/m/Y", strtotime($row['fecha'])).'</td>';										
 					echo "<td>"."<a href='#'' class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
 					echo '<td>'. $row['observaciones'].'</td>';
 					echo '<td>'. $row['descripcion'].'</td>';
 					echo '<td>';										
 					echo "<a href='actualizarGasto.php?id={$id}' class='btn btn-info btn-xs editar'>Editar </a>";
-					echo "<a href='javascript:void(0)' data-id='{$id}' class='btn btn-danger btn-xs eliminar'>Eliminar </a>";
-					//echo "<button data-g-id='{$id}' data-target='modalEliminar' class='btn btn-danger btn-xs eliminar'>Eliminar</button>";
+					echo "<a href='javascript:void(0)' data-id='{$id}' class='btn btn-danger btn-xs eliminar'>Eliminar </a>";					
 					echo '</td>';
 					echo '</tr>';					
 				}
@@ -392,7 +389,8 @@
 			try {
 				getcwd();				
 				$db = getDB();
-				$query = "SELECT g.id as id, g.monto as monto ,g.observaciones as observaciones ,tg.descripcion as descripcion FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id AND g.fecha = CURDATE()  AND id_usuario=:id_usuario LIMIT 0,5";
+				$query = "SELECT g.id as id, g.monto as monto ,g.observaciones as observaciones ,tg.descripcion as descripcion FROM gastos g INNER JOIN tipo_gasto tg 
+				ON g.id_tipo_gasto=tg.id AND g.fecha = CURDATE()  WHERE id_usuario=:id_usuario ORDER BY monto DESC LIMIT 0,5";
 				$stmt = $db->prepare($query);
 				$stmt->bindParam("id_usuario", $uid, PDO::PARAM_INT);
 				$stmt->execute();
@@ -412,6 +410,29 @@
 					echo '<td>Sin registros el día de hoy</td>';
 					echo '<td>No aplica</td>';
 					echo '</tr>';
+				}
+			} catch (PDOException $exception) {
+				die('ERROR: ' . $exception->getMessage());
+			}
+		}
+
+		function totalDiario($id){
+			
+			try {
+				getcwd();				
+				$db = getDB();
+				$query = "SELECT SUM(monto) as Total FROM gastos WHERE fecha = CURDATE()  AND id_usuario=:id_usuario";
+				$stmt = $db->prepare($query);
+				$stmt->bindParam("id_usuario", $id, PDO::PARAM_INT);
+				$stmt->execute();
+				$cantidad = $stmt->rowCount();
+				if ($cantidad > 0) {
+					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+						extract($row);
+						echo '$' .  number_format($row['Total'], 0,",",".");
+					}
+				}else{
+					echo "0";
 				}
 			} catch (PDOException $exception) {
 				die('ERROR: ' . $exception->getMessage());

@@ -11,43 +11,54 @@ $mesActual = $meses[date('n')-1];
 <head>
 	<meta charset="UTF-8">
 	<title>Listado de Gastos</title>
-	<link rel="stylesheet" href="../css/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../js/datatables/dataTables.bootstrap.css"/>
+  <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"> -->
+  <!-- Font Awesome CSS-->
+  <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../css/estilos.css">	
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
   <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>  
   <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>            
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />    
+  <!-- Google fonts - Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
   <script type="text/javascript" src="../js/bootbox/bootbox.min.js"></script>
 </head>
-<body class="bg-dark">
+<body>
 <div class="container">
-<div class="jumbotron">
-  <h1 class="display-4">Listado</h1>
-  <p class="lead">Listado de Gastos del Mes de <?php echo $mesActual; ?></p>  
-  <h1>Bienvenido <?php echo $userDetails->name; ?></h1>  
+  <div class="jumbotron">
+    <h1 class="display-4">Listado</h1>
+    <p class="lead">Listado de Gastos del Mes de <?php echo $mesActual; ?></p>  
+    <h1>Bienvenido <?php echo $userDetails->name; ?></h1>  
+  </div>
+    <div class="col-sm-3 pull-right"><button type="button" class="btn btn-info volver" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button>
+    </div>
+<!-- <fieldset>	 -->
+  <div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="panel-body">
+    <table class="table table-bordered" id="listadoGastos">
+      <thead>
+        <tr>
+            <th scope="col">Monto</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Comprobante</th>
+            <th scope="col">Observaciones</th>
+            <th scope="col">Tipo de Gasto</th>
+            <th scope="col">Opciones</th>
+        </tr>
+      </thead>
+        <?php $uid = $userDetails->uid; ?>
+        <?php $first_day = date('Y-m-01');  ?>
+        <tbody> 
+          <?php listarGastosMes($first_day, $uid); ?>
+      </tbody>
+    </table> 
+    </div>   
+  </div>
 </div>
-<div class="col-sm-3 pull-right"><button type="button" class="btn btn-info volver" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button></div>
-<fieldset>	
-<table class="table table-bordered table-dark" id="listadoGastos">
-<thead>
-    <tr>
-        <th scope="col">Monto</th>
-        <th scope="col">Fecha</th>
-        <th scope="col">Comprobante</th>
-        <th scope="col">Observaciones</th>
-        <th scope="col">Tipo de Gasto</th>
-        <th scope="col">Opciones</th>
-    </tr>
-  </thead>
-    <?php $uid = $userDetails->uid; ?>
-    <?php $first_day = date('Y-m-01');  ?>
-   <tbody> 
-    <?php listarGastosMes($first_day, $uid); ?>
-   </tbody>
-    </table>    
-    <!-- The Modal -->
+  <!-- The Modal -->
   <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" data-dismiss="modal">
     <div class="modal-content"  >              
@@ -62,11 +73,9 @@ $mesActual = $meses[date('n')-1];
       </div>                
     </div>
   </div>
-</div>
+  </div>
   <!-- Fin Modal -->
-</fieldset>
-<br><br>
-</div>	
+  
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->

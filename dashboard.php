@@ -6,6 +6,7 @@
       $fecha = $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1];
       $first_day = date('Y-m-01');      
       $userDetails=$userClass->userDetails($session_uid);      
+      /*Procedimientos Almacenados*/
       try {
             $db = getDB();
             $parametro = $session_uid;
@@ -30,7 +31,7 @@
           } catch (PDOException $e) {
             die("Error occurred:" . $e->getMessage());
         }                    
-        
+      /*Fin Procedimientos Almacenados*/
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,33 +42,12 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
-        <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="css/dist/css/bootstrap.min.css">
-    <!-- Font Awesome CSS-->
-    <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
-    <!-- Fontastic Custom icon font-->
-    <link rel="stylesheet" href="css/fontastic.css">
-    <!-- Google fonts - Roboto -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-    <!-- jQuery Circle-->
-    <link rel="stylesheet" href="css/grasp_mobile_progress_circle-1.0.0.min.css">
-    <!-- Custom Scrollbar-->
-    <link rel="stylesheet" href="js/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
-    <!-- theme stylesheet-->
-    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
-    <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="css/estilos.css">
-    <!-- Favicon-->
-    <link rel="shortcut icon" href="img/favicon.ico">
-    
-
+    <?php include("views/cabeceras.php");?>
   </head>
 
   <body>
-    <!-- Side Navbar -->
-    
+    <!-- Side Navbar -->    
     <?php include("views/sideMenu.php"); ?>
-
     <div class="page">
       <!-- navbar-->
     <?php include("views/header.php"); ?>
@@ -104,8 +84,8 @@
                 </div>
               </div>
             </div>
-
             <?php endwhile; ?>
+
             <!-- Count item widget-->
           </div>
           <hr>
@@ -139,7 +119,6 @@
                 </div>
               </div>
             </div>
-
             <?php endwhile; ?>
             <!-- Count item widget-->
           </div>
@@ -153,7 +132,7 @@
             <div class="col-lg-6 col-md-6">
               <div class="card to-do">
                 <h2 class="display h4">Últimos gastos registrados hoy, <?php echo $fecha; ?> </h2>
-                <p>Solo se muestran los últimos 5.</p>
+                <p>Total Gastado Hoy: <?php totalDiario($parametro); ?></p>
                 <div class="table-responsive">
                   <div class="listaditoGastos">
                     <table class="table table-bordered">
