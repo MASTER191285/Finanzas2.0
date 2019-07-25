@@ -455,6 +455,7 @@
     <!-- <script src="js/charts-home.js"></script> -->
     <script>
     $(document).ready(function () {
+      /*Logica del Grafico Circular*/
       var brandPrimary = '#33b35a';
       var PIECHART = $('#pieChart');
       var myPieChart = new Chart(PIECHART, {
@@ -494,7 +495,7 @@
                         ?>
                       ],
                       borderWidth: [1, 1, 1],
-                      backgroundColor: ["#0074D9", "#2ECC40", "#FF4136", "#FF851B", "#7FDBFF", "#B10DC9"],
+                      backgroundColor: ["#0074D9", "#2ECC40", "#FF4136", "#9F40FF", "#FFEAA3", "#B10DC9"],
                       hoverBackgroundColor: [
                           brandPrimary,
                           "rgba(75,192,192,1)",
@@ -503,6 +504,7 @@
                   }]
           }
       });
+      /*Fin Logica del Grafico Circular*/
     });
     </script>
     <!-- Main File-->

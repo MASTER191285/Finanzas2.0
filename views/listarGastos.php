@@ -41,8 +41,8 @@ $mesActual = $meses[date('n')-1];
     <table class="table table-bordered" id="listadoGastos">
       <thead>
         <tr>
-            <th scope="col">Monto</th>
             <th scope="col">Fecha</th>
+            <th scope="col">Monto</th>            
             <th scope="col">Comprobante</th>
             <th scope="col">Observaciones</th>
             <th scope="col">Tipo de Gasto</th>

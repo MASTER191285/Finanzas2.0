@@ -220,8 +220,8 @@
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					extract($row);
 					echo '<tr>';					
-					echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';
-					echo '<td>'. date("d/m/Y", strtotime($row['fecha'])).'</td>';										
+					echo '<td>'. date("d/m/Y", strtotime($row['fecha'])).'</td>';		
+					echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';													
 					echo "<td>"."<a href='#'' class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
 					echo '<td>'. $row['observaciones'].'</td>';
 					echo '<td>'. $row['descripcion'].'</td>';
@@ -335,7 +335,7 @@
 						$mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
 						$mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";						
 						echo $mensaje;						
-						header('location: ../views/listarGastos.php');
+						//header('location: ../views/listarGastos.php');
 					}else{						
 						$mensaje = "<div class='alert alert-danger alert-dismissible fade show' role='alert'>";
 						$mensaje.= "<strong>Error!</strong> Error al Modificar.";
