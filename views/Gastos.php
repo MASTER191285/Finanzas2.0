@@ -3,6 +3,7 @@ require '../controllers/funciones.php';
 include('../db/config.php');
 include('../session.php');
 $userDetails=$userClass->userDetails($session_uid);
+$fechaDefault = date("Y-m-j");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -42,7 +43,7 @@ $userDetails=$userClass->userDetails($session_uid);
 	    <hr>
 	    <label class="col-sm-4" id="fecha"><i class="fas fa-calendar-alt"></i> Fecha: </label>
 	    <div class="col-sm-4">
-	      <input type="date" required="" name="fecha" required>
+	      <input type="date" value="<?php echo $fechaDefault; ?>" name="fecha" required>
 	    </div>
 	    <hr>
 	    <label class="col-sm-2" id="comprobante"><i class="fas fa-file-upload"></i> Comprobante: </label>
