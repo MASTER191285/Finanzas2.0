@@ -15,7 +15,39 @@ $userDetails=$userClass->userDetails($session_uid);
 	  <!-- jQuery library -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
-  	<script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+<script type="text/javascript">
+$(function() {  
+	$("input[name=monto]").on("change keyup",function(){
+		  var num = $("input[name=monto]").val().replace(/\./g,'');
+		  if(!isNaN(num)){
+		  num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g,"$1.");
+		  num = num.split('').reverse().join('').replace(/^[\.]/,'');
+		  $("input[name=monto]").val(num);
+		  }
+		  else{ 
+		  $("input[name=monto]").val($("input[name=monto]").val().replace(/[^\d\.]*/g,''));
+		  }
+	  })
+	/**
+	 * funcion que prohibe presionar todo excepto las teclas comentadas abajito
+	 * @param  {[type]} e) {                      if(!event) event [description]
+	 * @return {[type]}    [description]
+	 */
+	  $("input[name=monto]").on("keydown",function (e) {
+			 if(!event) event = event || window.event;
+		return (
+		(event.keyCode > 7 && event.keyCode < 10)  // delete (8) o tabulador (9)
+		|| (event.keyCode > 45 && event.keyCode < 60) // numeros del teclado
+		|| (event.keyCode > 95 && event.keyCode < 106) // teclado numerico
+		|| event.keyCode == 17  // Ctrl
+		|| event.keyCode == 116 // F5
+		|| event.keyCode == 37
+		|| event.keyCode == 39
+		)
+	  });
+});
+</script>	  
 </head>
 <body class="bg-dark">
 <div class="container">
@@ -41,7 +73,7 @@ $userDetails=$userClass->userDetails($session_uid);
 		<hr>
 	    <label class="col-sm-2" id="monto"><i class="far fa-money-bill-alt"></i> Monto: </label>
 	    <div class="col-sm-4">
-	      <input type="number" required="" class="ingreso" name="monto">
+	      <input type="text" class="form-control"  required="" class="ingreso" name="monto">
 	    </div>
 	    <hr>
 	    <label class="col-sm-2" id="fecha"><i class="fas fa-calendar-alt"></i> Fecha: </label>
@@ -68,17 +100,5 @@ $userDetails=$userClass->userDetails($session_uid);
 <!-- Latest compiled JavaScript -->
 <script src="../css/dist/js/bootstrap.min.js"></script>	
 <script src="../css/js/src/util.js"></script>
-<script type="text/javascript">	
-// $('#selectIng').on('change', function() {
-// 		console.log($(this).val());
-// 		if ($(this).val() == 1) {
-// 			var total = document.getElementsByClassName("ingreso");
-// 			console.log(total);
-// 			total.value = 250000;
-// 		}     
-// });
-/*var id = document.querySelector("#id_user").value;
-console.log(id);*/
-</script>
 </body>
 </html>

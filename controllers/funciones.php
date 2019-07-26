@@ -51,8 +51,8 @@
      		try{    
      			getcwd();  	
      			$db = getDB();
-     			$mensaje = "";     			
-				$monto=htmlspecialchars(strip_tags($_POST['monto']));
+     			$mensaje = "";     							
+				$monto=htmlspecialchars(strip_tags(str_replace(".", "", $_POST['monto'])));
 		        $fecha=htmlspecialchars(strip_tags($_POST['fecha']));
 		        $tipoIngreso=htmlspecialchars(strip_tags($_POST['tipoIngreso']));
 		        if (strlen(htmlspecialchars(strip_tags($_POST['observaciones']))) == 0) {
@@ -76,7 +76,7 @@
                  
 		        if($inserccion){		            
 		            $mensaje = "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-		            $mensaje.= "<strong>Exito!</strong> Registro Insertado.";
+		            $mensaje.= "<strong>Exito!</strong> Ingreso Insertado.";
 		            $mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
 		            $mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";
 		            echo $mensaje;
@@ -100,7 +100,7 @@
      			getcwd();  	
      			$db = getDB();
      			$mensaje = "";
-				$monto=htmlspecialchars(strip_tags($_POST['monto']));
+				$monto=htmlspecialchars(strip_tags(str_replace(".", "", $_POST['monto'])));
 		        $fecha=htmlspecialchars(strip_tags($_POST['fecha']));
 		        $tipoGasto=htmlspecialchars(strip_tags($_POST['tipoGasto']));		        
 		        if (strlen(htmlspecialchars(strip_tags($_POST['observaciones']))) == 0) {
@@ -134,7 +134,7 @@
 
 					        if($inserccion){		            
 					            $mensaje = "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-					            $mensaje.= "<strong>Exito!</strong> Registro Insertado.";
+					            $mensaje.= "<strong>Exito!</strong> Gasto Insertado.";
 					            $mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
 					            $mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";
 					            echo $mensaje;
@@ -166,7 +166,7 @@
 
 					        if($inserccion){		            
 					            $mensaje = "<div class='alert alert-success alert-dismissible fade show' role='alert'>";
-					            $mensaje.= "<strong>Exito!</strong> Registro Insertado.";
+					            $mensaje.= "<strong>Exito!</strong> Gasto Insertado.";
 					            $mensaje.= "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>";
 					            $mensaje.= "<span aria-hidden='true'>&times;</span></button></div>";
 					            echo $mensaje;
