@@ -24,8 +24,13 @@ $mesActual = $meses[date('n')-1];
   <!-- Google fonts - Roboto -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
   <script type="text/javascript" src="../js/bootbox/bootbox.min.js"></script>
+  <style>
+    *{
+      font-color: #fff;
+    }
+  </style>
 </head>
-<body>
+<body class="bg-dark">
 <div class="container">
   <div class="jumbotron">
     <h1 class="display-4">Listado</h1>
@@ -35,9 +40,9 @@ $mesActual = $meses[date('n')-1];
     <div class="col-sm-3 pull-right"><button type="button" class="btn btn-info volver" onclick="window.location.href='../dashboard.php'" >Volver al Dashboard</button>
     </div>
 <!-- <fieldset>	 -->
-  <div class="panel panel-default">
+  <!-- <div class="panel panel-default">
   <div class="panel-heading">
-    <div class="panel-body">
+    <div class="panel-body"> -->
     <table class="table table-bordered" id="listadoGastos">
       <thead>
         <tr>
@@ -55,9 +60,9 @@ $mesActual = $meses[date('n')-1];
           <?php listarGastosMes($first_day, $uid); ?>
       </tbody>
     </table> 
-    </div>   
+    <!-- </div>   
   </div>
-</div>
+</div> -->
   <!-- The Modal -->
   <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" data-dismiss="modal">
@@ -136,7 +141,7 @@ $(function() {
     /*Fin Script Eliminar*/
     
     /*Script Listado*/
-    $('#listadoGastos').DataTable({
+    $('#listadoGastos').DataTable({        
         "language":  {
           "sProcessing":     "Procesando...",
           "sLengthMenu":     "Mostrar _MENU_ registros",
@@ -155,14 +160,15 @@ $(function() {
             "sLast":     "Último",
             "sNext":     "Siguiente",
             "sPrevious": "Anterior"
-          },
+          },          
           "oAria": {
 						"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
 						"sSortDescending": ": Activar para ordenar la columna de manera descendente"
-					}
+          }
         }
       }); 
     /*Fin Script Listado*/
+    //$(document).find("#listadoGastos thead th:first-child, #listadoGastos td:first-child").addClass('custom-class');
 });
 </script>
 </body>

@@ -255,17 +255,37 @@
 			try {
 				getcwd();								
 				$db = getDB();
-				$query = "SELECT g.id, g.monto as monto, g.fecha as fecha, g.observaciones as observaciones, g.comprobante as comprobante, tg.descripcion as descripcion FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE g.id=:id";
+				$query = "SELECT g.id, g.monto as monto, g.fecha as fecha, g.observaciones as observaciones, g.comprobante as comprobante, tg.id as idtipo, tg.descripcion as descripcion FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE g.id=:id";
 				$stmt = $db->prepare($query);
 				$stmt->bindParam("id", $id,PDO::PARAM_INT);
 				$stmt->execute();
-				$row = $stmt->fetch(PDO::FETCH_ASSOC);				
+				$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+				$tGastos = "SELECT id, descripcion FROM tipo_gasto";
+				$q2 = $db->query($tGastos);
+				$q2->setFetchMode(PDO::FETCH_ASSOC);   		
+
 				$monto = $row['monto'];
 				$fecha = $row['fecha'];
 				$observaciones = $row['observaciones'];
-				$descripcion = $row['descripcion'];
+				$descripcion = $row['idtipo'];				
 				$comprobante = $row['comprobante'];
-				echo "								
+				
+				echo '<label class="col-8 col-md-6" id="tipoGasto"><i class="fas fa-dollar-sign"></i> Tipo de Gasto: </label>';
+				echo '<div class="col-sm-4 col-md-6">';
+				echo '<select class="custom-select" id="selectIng" name="tipoGasto" required>';
+				while ($r = $q2->fetch()){
+				     echo "<option value='".$r['id'];
+					 if ($descripcion == $r['id']) {
+						 echo "selected='selected'";
+						 //echo "<option value='" . $r['id'] . "' selected='selected'>" . strtoupper($r['descripcion']) . "</option>";
+					 }
+					 echo "'>" . strtoupper($r['descripcion']) . "</option>";
+				}
+				echo '</select>';
+				echo '</div>';
+				echo "
+				<hr>
 				<label class='col-sm-2' id='monto'><i class='far fa-money-bill-alt'></i> Monto: </label>
 				<div class='col-sm-4'>
 				  <input type='number' name='monto' value=$monto class='form-control' >

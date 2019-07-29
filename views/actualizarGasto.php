@@ -27,11 +27,11 @@ include('../session.php');
     <div class="form-group">        
             <?php gastoaActualizar($id); ?>    
             <?php ActualizarGasto($id); ?>
-            <label class="col-8 col-md-6" id="tipoGasto"><i class="fas fa-dollar-sign"></i> Tipo de Gasto: </label>
+            <!-- <label class="col-8 col-md-6" id="tipoGasto"><i class="fas fa-dollar-sign"></i> Tipo de Gasto: </label>
             <div class="col-sm-4 col-md-6">
-            <select class="custom-select" id="selectIng" name="tipoGasto" required><?php getTipoGasto(); ?></select> 	
+            <select class="custom-select" id="selectIng" name="tipoGasto" required>></select> 	
             </div>
-            <hr>
+            <hr> -->
             <input type='submit' value='Actualizar Gasto' class='btn btn-primary' />
             <a href='listarGastos.php' class='btn btn-info'>Volver al Listado</a>
     </div>
