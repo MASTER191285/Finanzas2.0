@@ -13,11 +13,6 @@
 				default:
 				break;
 			}
-			// if($_REQUEST['action'] == 'eliminarGasto')
-			// {
-			// 	$valor = $_REQUEST['valor'];
-			// 	return eliminarGasto($valor);
-			// }
 		}
 		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
 		$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -530,53 +525,6 @@
 			}
 		}
 
-    	function buscaGastos(){
-    		
-    		try {
 
-    			$db = getDB();
-    			 $salida = "";
-			    $query = "SELECT G.monto, G.fecha, G.observaciones, TG.descripcion FROM gastos G INNER JOIN tipo_gasto TG ON G.id_tipo_gasto=TG.id ORDER BY G.monto LIMIT 20";
-
-			    if (isset($_POST['consulta'])) {
-			    	$q = $conn->real_escape_string($_POST['consulta']);
-			    $query = "SELECT G.monto, G.fecha, G.observaciones, TG.descripcion FROM gastos G INNER JOIN tipo_gasto TG ON G.id_tipo_gasto=TG.id WHERE G.monto LIKE '%$q%' OR G.observaciones LIKE '%$q%' OR TG.descripcion LIKE '%$q%'";
-			    }
-			    $stmt = $db->prepare($query);
-
-			    //$resultado = $conn->query($query);
-			    $stmt->execute();
-			    if ($stmt->num_rows>0) {
-			    	$salida.="<table border=1 class='tabla_datos'>
-			    			<thead>
-			    				<tr id='titulo'>
-			    					<td>Monto</td>
-			    					<td>Fecha</td>
-			    					<td>Observaciones</td>
-			    					<td>Descripcion</td>
-			    					<td>Accion</td>
-			    				</tr>
-			    			</thead>  			
-			    	<tbody>";
-
-			    	while ($fila = $stmt->fetch_assoc()) {
-			    		$salida.="<tr>
-			    					<td>".$fila['monto']."</td>
-			    					<td>".$fila['fecha']."</td>
-			    					<td>".$fila['observaciones']."</td>
-			    					<td>".$fila['descripcion']."</td>			    					
-			    				</tr>";
-
-			    	}
-			    	$salida.="</tbody></table>";
-			    }else{
-			    	$salida.="Sin Registros....";
-			    }
-
-			    echo $salida;	        			
-    		} catch (Exception $e) {
-    			echo '{"error":{"text":'. $e->getMessage() .'}}';
-    		}
-    	}    	
 
 ?>
