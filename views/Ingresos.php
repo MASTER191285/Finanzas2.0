@@ -10,12 +10,14 @@ $userDetails=$userClass->userDetails($session_uid);
 	<meta charset="UTF-8">
 	<title>Ingresos</title>
 	<link rel="stylesheet" href="../css/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<!-- Font Awesome CSS-->
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../css/estilos.css">	
 	  <!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../js/jquery/jquery.min.js"></script> 
   	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 	<script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+
 <script type="text/javascript">
 $(function() {  
 	$("input[name=monto]").on("change keyup",function(){
@@ -47,7 +49,9 @@ $(function() {
 		)
 	  });
 });
+
 </script>	  
+
 </head>
 <body class="bg-dark">
 <div class="container">
@@ -93,8 +97,6 @@ $(function() {
 </fieldset>
 <br><br>
 </div>	
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->

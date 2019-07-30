@@ -20,10 +20,10 @@
             <li><a href="charts.html"> <i class="fa fa-bar-chart"></i>Gráficos</a></li>
             <li><a href="views/ingresos.php"> <i class="icon-grid"></i>Insertar Ingresos</a></li>
             <li><a href="views/gastos.php"> <i class="icon-grid"></i>Insertar Gastos</a></li>
-            <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Mantenedores</a>
+            <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Reportes</a>
               <ul id="exampledropdownDropdown" class="collapse list-unstyled ">
-                <li><a href="views/listarGastos.php">Listado de Gastos</a></li>
-                <li><a href="#">Modificar Gastos</a></li>
+                <li><a href="views/listarGastos.php">Listado de Gastos del Mes Actual</a></li>
+                <li><a href="views/gastosporMes.php">Gastos x Mes</a></li>
                 <li><a href="#">Modificar Ingresos</a></li>
               </ul>
             </li>

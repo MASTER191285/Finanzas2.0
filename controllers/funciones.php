@@ -1,4 +1,24 @@
-<?php 
+<?php
+		if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])){
+			switch ($_REQUEST['action']) {
+				case 'eliminarGasto':
+				$valor = $_REQUEST['valor'];
+				return eliminarGasto($valor);
+				break;
+				case 'buscaGasto':
+				$valor = $_REQUEST['valor'];
+				$id = $_REQUEST['id'];
+				return buscaGasto($valor,$id);
+				break;				
+				default:
+				break;
+			}
+			// if($_REQUEST['action'] == 'eliminarGasto')
+			// {
+			// 	$valor = $_REQUEST['valor'];
+			// 	return eliminarGasto($valor);
+			// }
+		}
 		$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
 		$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
@@ -250,6 +270,39 @@
 			
 		}
 
+		function buscaGasto($idMes, $id){
+			
+			try {
+				require_once('../db/config.php');
+				getcwd();								
+				$db = getDB();
+				$query = 'SELECT g.id, g.monto ,g.fecha ,g.comprobante ,g.observaciones  ,tg.descripcion FROM  gastos g INNER JOIN 
+				tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE MONTH(fecha)=:idMes AND id_usuario=:id ORDER BY g.fecha';
+				$stmt = $db->prepare($query);
+				// $stmt->bindParam("fechaini", $fecha, PDO::PARAM_STR, 10);
+				$stmt->bindParam("idMes", $idMes,PDO::PARAM_INT);
+				$stmt->bindParam("id", $id,PDO::PARAM_INT);
+				$stmt->execute();
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+					extract($row);
+					echo '<tr>';					
+					echo '<td>'. date("d/m/Y", strtotime($row['fecha'])).'</td>';		
+					echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';													
+					echo "<td>"."<a href='#' class='fotito'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
+					echo '<td>'. $row['observaciones'].'</td>';
+					echo '<td>'. $row['descripcion'].'</td>';
+					echo '<td>';										
+					echo "<a href='actualizarGasto.php?id={$id}' class='btn btn-info btn-xs editar'>Editar </a>";
+					echo "<a href='javascript:void(0)' data-id='{$id}' class='btn btn-danger btn-xs eliminar'>Eliminar </a>";					
+					echo '</td>';
+					echo '</tr>';					
+				}
+			} catch (PDOException $exception) {
+				die('ERROR: ' . $exception->getMessage());
+			}
+			
+		}		
+
 		function gastoaActualizar($id){
 			
 			try {
@@ -370,14 +423,7 @@
 			}
 		}
 
-		if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])){
-			if($_REQUEST['action'] == 'eliminarGasto')
-			{
-				$valor = $_REQUEST['valor'];
-				return eliminarGasto($valor);
-			}
 
-		}
 		function eliminarGasto($id){
 
 			try {
