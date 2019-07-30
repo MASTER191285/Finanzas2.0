@@ -54,18 +54,16 @@ $mesActual = $meses[date('n')-1];
       <thead>
         <tr>
             <th scope="col">Fecha</th>
-            <th scope="col">Monto</th>            
-            <th scope="col">Comprobante</th>
+            <th scope="col">Monto</th>                        
             <th scope="col">Observaciones</th>
-            <th scope="col">Tipo de Gasto</th>
-            <th scope="col">Opciones</th>
+            <th scope="col">Tipo de Gasto</th>            
         </tr>
       </thead>
         <?php $uid = $userDetails->uid; ?>
-        <tbody id="cuerpoGastos"> 
-          
+        <tbody id="cuerpoGastos">           
         </tbody>
     </table> 
+    <input type="button" id="exportar" class="btn btn-info" value="Exportar a PDF">
   <!-- The Modal -->
   <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" data-dismiss="modal">
@@ -95,7 +93,9 @@ $mesActual = $meses[date('n')-1];
 <script src="../css/js/src/util.js"></script>
 <script>
 // Get the modal
-$(function() {  
+$(function() {
+  
+  $("#exportar").attr("disabled", true);
 
     /*Script PopUP Imagen*/
 	$('.fotito').on('click', function() {
@@ -118,10 +118,18 @@ $(function() {
                     $("#cuerpoGastos").hide(500);
                     $("#cuerpoGastos").html(data);
                     $("#cuerpoGastos").show(500);
+                    $("#exportar").attr("disabled", false);
                 }
             });
     });
     /*Fin Script Mes*/
+
+    /*Script Exportar*/
+    $("#exportar").click(function(){
+        var idMes = $("#selectIng").val();
+        var idU = "<?php echo $uid; ?>";   
+        window.open("../controllers/verPDF.php?action=verPDF&idMes="+idMes+"&id="+idU);        
+    });
 
     /*Script Eliminar*/
     $(".eliminar").on("click",function(e){      
