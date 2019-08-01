@@ -237,7 +237,7 @@
 					echo '<tr>';					
 					echo '<td>'. date("d/m/Y", strtotime($row['fecha'])).'</td>';		
 					echo '<td>'. number_format($row['monto'], 0,",",".").'</td>';													
-					echo "<td>"."<a href='#'' class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
+					echo "<td>"."<a class='pop'>"."<img width='100px' alt='Sin Imagen' id='comprobante' src='../uploads/" .  $row['comprobante'] . "'/>"."</a>"."</td>";
 					echo '<td>'. $row['observaciones'].'</td>';
 					echo '<td>'. $row['descripcion'].'</td>';
 					echo '<td>';										

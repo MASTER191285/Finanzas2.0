@@ -42,7 +42,7 @@ $mesActual = $meses[date('n')-1];
   <!-- <div class="panel panel-default">
   <div class="panel-heading">
     <div class="panel-body"> -->
-    <table class="table table-bordered" id="listadoGastos">
+    <table class="table table-striped table-bordered" id="listadoGastos">
       <thead>
         <tr>
             <th scope="col">Fecha</th>
@@ -85,7 +85,8 @@ $mesActual = $meses[date('n')-1];
 <!-- Latest compiled JavaScript -->
 <script src="../css/dist/js/bootstrap.min.js"></script>	
 <script src="..js/datatables/jquery.dataTables.js"></script>
-<script src="..js/datatables/dataTables.bootstrap.js"></script>
+<!-- <script src="..js/datatables/dataTables.bootstrap.js"></script> -->
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 <script src="../css/js/src/util.js"></script>
 <script>
 // Get the modal
