@@ -9,7 +9,8 @@ $mesActual = $meses[date('n')-1];
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-sccale=1, user-scalable=yes">
 	<title>Búsqueda de Gastos por Mes</title>
   <link rel="stylesheet" href="../css/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="../js/datatables/dataTables.bootstrap.css"/>

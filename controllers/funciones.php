@@ -131,7 +131,7 @@
 				$destino = $directorio . $archivo;
 				$tipoArchivo = pathinfo($destino,PATHINFO_EXTENSION);
 				// Extensiones permitidas
-				$extPermitida = array('jpg','png','jpeg','pdf');
+				$extPermitida = array('jpg','png','jpeg','JPG','PNG','JPEG');
 				
 				if (empty($_FILES["comprobante"]["name"])) {
 						$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

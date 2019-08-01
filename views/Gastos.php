@@ -3,12 +3,13 @@ require '../controllers/funciones.php';
 include('../db/config.php');
 include('../session.php');
 $userDetails=$userClass->userDetails($session_uid);
-$fechaDefault = date("Y-m-j");
+$fechaDefault = date("Y-m-d");
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-sccale=1, user-scalable=no">
 	<title>Gastos</title>
 	<link rel="stylesheet" href="../css/dist/css/bootstrap.min.css">
 	<!-- Font Awesome CSS-->
