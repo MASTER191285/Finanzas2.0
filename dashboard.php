@@ -4,7 +4,7 @@
       include('session.php');
       setlocale(LC_ALL,"es_ES");      
       $fecha = $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1];
-      $first_day = date('Y-m-01');                  
+      $first_day = date('Y-m-01');          
       $userDetails=$userClass->userDetails($session_uid);      
       /*Procedimientos Almacenados*/
       try {
@@ -194,17 +194,21 @@
               labels: [
                 <?php
                     getcwd();       
-                    $db = getDB();
-                    $query = "SELECT sum(g.monto) AS TOTALES, tg.descripcion AS DESCRIPCION FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id  WHERE g.id_usuario = 1 AND g.fecha BETWEEN '2019-07-01' AND CURDATE() GROUP BY tg.descripcion";
-                    $stmt = $db->prepare($query);                
+                    $db = getDB();                    
+                    $query = "SELECT sum(g.monto) AS TOTALES, tg.descripcion AS DESCRIPCION FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id  WHERE g.id_usuario=:id_usuario AND g.fecha BETWEEN :fechaini AND CURDATE() GROUP BY tg.descripcion";
+                    $stmt = $db->prepare($query);
+                    $stmt->bindParam("fechaini", $first_day, PDO::PARAM_STR, 10);
+                    $stmt->bindParam("id_usuario", $parametro,PDO::PARAM_INT);          
                     $stmt->execute(); 
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     ?>
                       ['<?php echo $row['DESCRIPCION']?>'],
                     <?php 
                     }
-                  ?>                  
+                  ?>                
               ],
+              borderWidth: [1, 1, 1],
+              backgroundColor: ["#0074D9", "#2ECC40", "#FF4136", "#9F40FF", "#FFEAA3", "#B10DC9", "#e8c4ff", "#76ff9e", "#ff1153", "#a57600", "#30ffee", "#caff00", "#480068", "#c13c00", "#28006d", "#707300", "#001a6a", "#2cff08"],
               datasets: [
                   {
                       data: [
@@ -212,7 +216,7 @@
                           getcwd();       
                           $db = getDB();
                           $query = "SELECT ROUND(sum(g.monto) * 100.0 / (select monto from ingresos where id_tipo_ingreso = 1 and id_usuario=:id_usuario and fecha BETWEEN :fechaini AND CURDATE()),1) as PORCENTAJE
-                          ,tg.descripcion AS DESCRIPCION FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE g.id_usuario=:id_usuario AND g.fecha BETWEEN :fechaini AND CURDATE() GROUP BY tg.descripcion";
+                          ,tg.descripcion AS DESCRIPCION FROM gastos g INNER JOIN tipo_gasto tg ON g.id_tipo_gasto=tg.id WHERE g.id_usuario=:id_usuario AND g.fecha BETWEEN :fechaini AND CURDATE() GROUP BY tg.descripcion ORDER BY tg.descripcion";
                           $stmt = $db->prepare($query);
                           $stmt->bindParam("fechaini", $first_day, PDO::PARAM_STR, 10);
                           $stmt->bindParam("id_usuario", $parametro,PDO::PARAM_INT);                                  
@@ -225,7 +229,7 @@
                         ?>
                       ],
                       borderWidth: [1, 1, 1],
-                      backgroundColor: ["#0074D9", "#2ECC40", "#FF4136", "#9F40FF", "#FFEAA3", "#B10DC9"],
+                      backgroundColor: ["#0074D9", "#2ECC40", "#FF4136", "#9F40FF", "#FFEAA3", "#B10DC9", "#e8c4ff", "#76ff9e", "#ff1153", "#a57600", "#30ffee", "#caff00", "#480068", "#c13c00", "#28006d", "#707300", "#001a6a", "#2cff08"],
                       hoverBackgroundColor: [
                           brandPrimary,
                           "rgba(75,192,192,1)",
