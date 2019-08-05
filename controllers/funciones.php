@@ -341,19 +341,17 @@
 				$monto = $row['monto'];
 				$fecha = $row['fecha'];
 				$observaciones = $row['observaciones'];
-				$descripcion = $row['idtipo'];				
+				$idTipo = $row['idtipo'];
+				$descripcion = $row['descripcion'];				
 				$comprobante = $row['comprobante'];
 				
 				echo '<label class="col-8 col-md-6" id="tipoGasto"><i class="fas fa-dollar-sign"></i> Tipo de Gasto: </label>';
 				echo '<div class="col-sm-4 col-md-6">';
-				echo '<select class="custom-select" id="selectIng" name="tipoGasto" required>';
+				echo '<select class="custom-select" id="selectIng" name="tipoGasto" required>';				
+				echo '<option value="'.$idTipo.'">'.strtoupper($descripcion).'</option>';  
 				while ($r = $q2->fetch()){
-				     echo "<option value='".$r['id'];
-					 if ($descripcion == $r['id']) {
-						 echo "selected='selected'";
-						 //echo "<option value='" . $r['id'] . "' selected='selected'>" . strtoupper($r['descripcion']) . "</option>";
-					 }
-					 echo "'>" . strtoupper($r['descripcion']) . "</option>";
+					echo'<option value="'.$r['id'].'">'.strtoupper($r['descripcion']).'</option>';  
+				 
 				}
 				echo '</select>';
 				echo '</div>';
